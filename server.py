@@ -9,7 +9,7 @@ def home():
 
 @app.route('/products/<int:productID>')
 def products(productID):
-    return "this is the products page. All products are shown if productID is none, product listing otherwise"
+    return render_template("products.html")
 
 @app.route('/checkout')
 def checkout():
