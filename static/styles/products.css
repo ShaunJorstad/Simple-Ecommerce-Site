@@ -1,0 +1,24 @@
+.product{
+    background-color: lightgrey;
+    width: 188px;
+    height: 236px;
+
+}
+
+.prodImg{
+    display: block;
+
+    height: 120px;
+
+    padding-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.prodTitle{
+    text-align: center;
+}
+
+.price{
+    text-align: center;
+}
