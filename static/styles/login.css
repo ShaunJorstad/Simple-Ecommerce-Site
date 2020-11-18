@@ -1,0 +1,28 @@
+#left {
+  height: 100%;
+  vertical-align: middle;
+}
+
+#right {
+  padding-left: 0px;
+  padding-right: 0px;
+  background-image: url("https://images.unsplash.com/photo-1561069934-eee225952461?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80");
+  height: 100%;
+}
+
+#signinContainer {
+  margin: auto;
+  margin-top: 70px;
+  width: 60%;
+  height: 60%;
+}
+
+form, #submit {
+  margin-top: 40px;
+}
+
+html, body {
+  height: 100%;
+}
+
+/*# sourceMappingURL=login.css.map */
