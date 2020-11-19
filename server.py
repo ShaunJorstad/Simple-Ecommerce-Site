@@ -6,12 +6,19 @@ import os, sqlite3
 import base64
 from functools import wraps
 from datetime import datetime, timedelta
+from flask_uploads import configure_uploads, IMAGES, UploadSet
+from werkzeug.datastructures import CombinedMultiDict, MultiDict 
 
+serverdir = os.path.dirname(__file__)
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config["SECRET_KEY"] = "correcthorsebatterystaple"
+app.config["UPLOADED_IMAGES_DEST"] = os.path.join(serverdir, "images/users")
+imageDir = os.path.join(serverdir, 'images/users')
 
-serverdir = os.path.dirname(__file__)
+images = UploadSet('images', IMAGES)
+configure_uploads(app, images)
+
 pepfile = os.path.join(serverdir, "pepper.bin")
 with open(pepfile, 'rb') as fin:
 	key = fin.read()#
@@ -145,8 +152,15 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-	form = RegistrationForm(request.form)
+	form = RegistrationForm(CombinedMultiDict((request.files, request.form)))
 	if request.method == 'POST' and form.validate():
+		profile = request.files['profile']
+		filetype = profile.filename.split('.')[1]
+		print(filetype)
+		if  not (filetype == "jpg" or filetype == "png"):
+			flash("profile must be jpg or png")
+			return redirect(url_for('register'))
+		profile.save(os.path.join(imageDir, str(form.email.data) + '.' + str(filetype)))
 		user = User(form.email.data, form.password.data, form.fname.data, form.lname.data)
 		if db_add(user):
 			return redirect(url_for('home'))

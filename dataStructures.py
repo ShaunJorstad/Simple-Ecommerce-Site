@@ -1,4 +1,6 @@
 from wtforms import *
+# from flask_uploads import configure_uploads, IMAGES, UploadSet
+# images = UploadSet('images', IMAGES)
 
 class RegistrationForm(Form):
 	email = StringField('Email', [validators.Length(min=6, max=35)])
