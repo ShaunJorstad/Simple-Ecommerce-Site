@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> Garage Sale </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">GarageSale</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('sell') }}">Sell</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('terms') }}">Terms</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+        </li>
+        
+        </ul>
+        
+        <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <ul class="navbar-nav ml-auto">
+        {%  if not user %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+        </li>
+        {% endif %}
+        {% if user %}
+        <li class="nav-item">
+            <a class="nav-link" href="#">Cart</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout {{ user[0] }}</a>
+        </li>
+        {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<main class="container-fluid">
+    <div class="row text-center pt-5">
+        <div class="col-md-6 align-self-center">
+            <h2 class="font-weight-bold">Mission Statement</h2>
+            <p class="font-weight-light">Bacon ipsum dolor amet chuck pancetta tongue, strip steak ham hock ribeye short loin leberkas prosciutto hamburger. Prosciutto biltong cow, filet mignon ham sausage capicola picanha. Ham pancetta doner, shank leberkas bresaola kevin jerky flank beef ribs sausage brisket. Cow shankle fatback pork chop chicken spare ribs.</p>
+        </div>
+        <div class="col-md-6">
+            <img class="img-fluid" src="https://www.moneycrashers.com/wp-content/uploads/2011/08/garage-sale-tips-2136x1427.jpg" alt="">
+        </div>
+    </div>
+
+    <div class="row pt-5">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-primary btn-lg" href="{{ url_for('sell') }}">Sell My Junk!</a>
+        </div>
+    </div>
+
+    <div class="row pt-5">
+        <div class="container">
+            <div class="col-md-12">
+                <img src="https://cdn2.ramseysolutions.net/dynamic/media/common_images/article_images/blog_ai_lg/blog_ai_lg_yard_sale.jpg/960w.jpg" alt="" class="img-responsive"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-10">
+            <h2 class="font-weight-bold">Drumstick hamburger</h2>
+            <p class="font-weight-light">t-bone pork loin, burgdoggen biltong bacon pastrami flank pig pork sirloin shankle boudin pancetta. Kielbasa cupim porchetta, pastrami pig kevin cow prosciutto biltong leberkas frankfurter bacon. Ball tip tail sirloin biltong. Salami pig spare ribs, chuck picanha kielbasa brisket ribeye shank sausage flank porchetta meatball short ribs. Boudin picanha meatloaf jowl shoulder tri-tip spare ribs hamburger andouille ham pork chop. Shoulder ham beef prosciutto tongue pork loin. Chicken tongue turducken, buffalo ground round capicola frankfurter turkey venison strip steak.
+
+    Boudin turducken turkey beef ribs bresaola meatloaf. Bresaola hamburger swine fatback andouille t-bone. Ribeye short loin doner bresaola short ribs pork belly rump fatback alcatra kielbasa andouille bacon venison. Porchetta prosciutto cupim pastrami shank. Shankle short ribs ball tip short loin, pig spare ribs strip steak turducken. Kielbasa shank strip steak corned beef ground round turkey. Spare ribs buffalo pork belly fatback brisket short ribs bacon, rump swine pastrami leberkas pancetta corned beef doner.</p>
+            <h2 class="font-weight-bold">Pastrami ham</h2>
+            <p class="font-weight-light">hock ham shank frankfurter pork belly, sausage strip steak landjaeger picanha ball tip. Pork loin cupim kielbasa venison, leberkas tongue cow hamburger ribeye shankle. Ground round capicola pastrami, shoulder tail swine cow leberkas tongue fatback. Shoulder strip steak tri-tip hamburger. Drumstick alcatra chuck landjaeger ham t-bone venison kevin ground round leberkas beef pancetta rump salami. Boudin tail burgdoggen, hamburger pork chop ball tip capicola turkey alcatra landjaeger ham. Alcatra pork loin tongue porchetta tail shoulder cow rump salami bacon pig bresaola.</p>
+        </div>
+    </div>
+
+
+    <footer class="footer pt-5 row">
+        <div>
+            <span class="text-muted text-center col-lg-12">
+                <div class="footer-copyright py-3">© 2020 Copyright GarageSale</div>
+            </span>
+        </div>
+    </footer>
+</main>
+
+</body>

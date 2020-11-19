@@ -76,7 +76,7 @@ def authenticate(user):
 		session["uid"] = resultHash[1]
 		session["expires"] = datetime.now()
 
-def logout():
+def logout_helper():
 	session["uid"] = None
 
 # ROUTES ----------------------------------------------------------------
@@ -97,9 +97,25 @@ def login_required(f):
 	return wrapper
 
 @app.route('/')
-@login_required
 def home():
-	return "this is the home page"
+	uid = session.get("uid")
+	try:
+		exp = session.get("expires")
+	except:
+		exp = None
+	if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
+		return render_template("home.j2", user=None)
+	else:
+		db = get_db()
+		usr = db.cursor().execute('''
+		select fname, lname, email from users where uid=?
+		''',(uid, )).fetchone()
+		return render_template("home.j2", user=usr)
+
+@app.route("/logout/")
+def logout():
+	logout_helper()
+	return redirect(url_for("home"))
 
 @app.route('/products/<int:productID>')
 @login_required
