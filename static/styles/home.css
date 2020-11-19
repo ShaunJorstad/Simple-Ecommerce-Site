@@ -38,3 +38,11 @@ footer ul li{
     margin-right: 15px;
     font-size:14px;
     }
+
+#description {
+    margin: auto
+}
+
+#saleImage {
+    width: 100%
+}

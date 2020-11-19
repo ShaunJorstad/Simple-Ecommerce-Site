@@ -28,14 +28,15 @@
 
                     <form method="POST" action="/register">
                         <div class="form-group">{{ form.email.label }} {{ form.email(class_="form-control") }}</div>
-                        <div class="form-group">{{ form.fname.label }} {{ form.fname(class_="form-control") }}</div>
-                        <div class="form-group">{{ form.lname.label }} {{ form.lname(class_="form-control") }}</div>
+                        <div class="form-group">{{ "First Name" }} {{ form.fname(class_="form-control") }}</div>
+                        <div class="form-group">{{ "Last Name" }} {{ form.lname(class_="form-control") }}</div>
 
                         <div class="form-group">{{ form.password.label }} {{ form.password(class_="form-control") }}</div>
                         <div class="form-group">{{ form.confirm.label }} {{ form.confirm(class_="form-control") }}</div>
-                        <div class="form-group">{{ form.accept_tos.label }} {{ form.accept_tos(class_="form-check-input") }}</div>
+                        <div class="form-group">{{ form.accept_tos.label }} {{ form.accept_tos }}</div>
                         {{ form.submit(class_="btn btn-primary") }}
                     </form>
+          <a href="{{url_for('login')}}">Sign In</a>
 				</div>
 			</div>
 			<div id="right" class="col-lg h-100">
