@@ -174,6 +174,17 @@ def contact():
 	return "this is the contact us page"
 
 @app.route('/terms')
-@login_required
 def terms():
-	return "this is the terms page"
+	uid = session.get("uid")
+	try:
+		exp = session.get("expires")
+	except:
+		exp = None
+	if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
+		return render_template("terms.j2", user=None)
+	else:
+		db = get_db()
+		usr = db.cursor().execute('''
+		select fname, lname, email from users where uid=?
+		''',(uid, )).fetchone()
+		return render_template("terms.j2", user=usr)
