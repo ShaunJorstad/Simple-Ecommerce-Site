@@ -1,5 +1,3 @@
 # WebProject
 
-pip install wtforms
-pip install flask_uploads
-pip install flask-reuploaded
+pip install flask wtforms cryptography flask-reuploaded passlib werkzeug
