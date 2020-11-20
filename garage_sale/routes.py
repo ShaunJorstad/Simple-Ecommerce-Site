@@ -34,13 +34,13 @@ def logout():
 
 @app.route('/products')
 def product_list():
-    return render_template("products.html")
+    return render_template("products.j2")
 
 
 @app.route('/products/<int:product_id>')
 @login_required
 def product(product_id):
-    return render_template("products.html")
+    return render_template("products.j2")
 
 
 @app.route('/checkout')
@@ -88,7 +88,7 @@ def register():
 
 @app.route('/contact')
 def contact():
-    return render_template("feedback.html")
+    return render_template("feedback.j2")
 
 
 @app.route('/terms')
