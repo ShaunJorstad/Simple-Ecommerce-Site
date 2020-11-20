@@ -129,7 +129,7 @@ def products():
 	return render_template("products.html")
 
 @app.route('/products/<int:productID>')
-def products(productID):
+def product(productID):
 	return "this is an individual products page"
 
 @app.route('/checkout')
