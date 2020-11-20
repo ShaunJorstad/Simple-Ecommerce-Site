@@ -6,10 +6,12 @@ setup(
     include_package_data=True,
     install_requires=[
         'flask',
+        'flask-wtf',
         'wtforms',
         'cryptography',
         'flask-reuploaded',
         'passlib',
-        'werkzeug'
+        'werkzeug',
+        'flask-bootstrap'
     ],
 )

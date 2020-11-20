@@ -7,7 +7,7 @@ from werkzeug.datastructures import CombinedMultiDict
 from garage_sale import app, image_dir
 from garage_sale.data_structures import User
 from garage_sale.database import database
-from garage_sale.forms import LoginForm, RegistrationForm
+from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm
 from garage_sale.utils import logout_helper, login_required, authenticate
 
 
@@ -49,10 +49,23 @@ def checkout():
     return "this is the checkout page"
 
 
-@app.route('/sell')
-@login_required
-def sell():
-    return render_template("create_product.j2")
+@app.route('/sell', methods=['GET'])
+#@login_required
+def sell_get():
+    return render_template("create_product.j2", form=CreateProductForm())
+
+
+@app.route('/sell', methods=['POST'])
+#@login_required
+def sell_post():
+    sell_form = CreateProductForm(request.form)
+
+    if sell_form.validate():
+        sell_form.to_product().add_to_database()
+        return redirect(url_for('home'))
+    else:
+        flash("Invalid. Please try again.")
+        return redirect(url_for('sell_get'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

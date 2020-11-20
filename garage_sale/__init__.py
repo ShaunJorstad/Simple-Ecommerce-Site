@@ -2,6 +2,7 @@ import os
 from functools import wraps
 
 from flask import Flask, g
+from flask_bootstrap import Bootstrap
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 
@@ -30,6 +31,8 @@ app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config["SECRET_KEY"] = "correcthorsebatterystaple"
 app.config["UPLOADED_IMAGES_DEST"] = os.path.join(server_dir, "images/users")
+
+Bootstrap(app)
 
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)

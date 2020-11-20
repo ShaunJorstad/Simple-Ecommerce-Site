@@ -16,13 +16,13 @@
     </div>
 {% endmacro %}
 
-{% macro row() %}
-    <div class="row">
+{% macro row(h_center=false, v_center=false) %}
+    <div class="row {% if h_center %}justify-content-center{% endif %} {% if v_center %}align-items-center{% endif %}">
         {{ caller() }}
     </div>
 {% endmacro %}
 
-{% macro column(type) %}
+{% macro column(type, h_center=false) %}
     <div class="{{ type }}">
         {{ caller() }}
     </div>

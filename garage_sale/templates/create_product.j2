@@ -1,5 +1,39 @@
 {% extends "base/base.j2" %}
 
+{% import "base/macros.j2" as macro %}
+{% import "bootstrap/wtf.html" as wtform %}
+
 {% block content %}
-    <h1>Nothing here</h1>
+    {% call macro.container() %}
+        <div class="page-header">
+            <h1>Sell a Product</h1>
+        </div>
+
+        {% call macro.form() %}
+            {% call macro.row(h_center=true, v_center=true) %}
+                {% call macro.column('col-md-6') %}
+                    {{ form.hidden_tag() }}
+                    {% call macro.row() %}
+                        {% call macro.column('col-sm-9') %}
+                            {{ wtform.form_field(form.posting_title) }}
+                        {% endcall %}
+                        {% call macro.column('col-sm-3') %}
+                            {{ wtform.form_field(form.price) }}
+                        {% endcall %}
+                    {% endcall %}
+                    {{ wtform.form_field(form.description) }}
+                    {{ wtform.form_field(form.tags) }}
+                    {{ wtform.form_field(form.condition) }}
+                {% endcall %}
+                {% call macro.column('col-md-6') %}
+                    <img src="{{ url_for('static', filename='images/truck.jpg') }}" alt="posting image">
+                    {{ wtform.form_field(form.image_file) }}
+                {% endcall %}
+            {% endcall %}
+
+            {% call macro.row(h_center=true) %}
+                {{ wtform.form_field(form.create_posting) }}
+            {% endcall %}
+        {% endcall %}
+    {% endcall %}
 {% endblock %}
