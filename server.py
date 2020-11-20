@@ -171,7 +171,7 @@ def register():
 @app.route('/contact')
 @login_required
 def contact():
-	return "this is the contact us page"
+	return render_template("feedback.html")
 
 @app.route('/terms')
 def terms():
