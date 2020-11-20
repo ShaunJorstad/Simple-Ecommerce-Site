@@ -20,3 +20,7 @@ class RegistrationForm(Form):
     fname = StringField('fname', [validators.required()])
     lname = StringField('lname', [validators.required()])
     submit = SubmitField('Submit')
+
+
+class CreateProductForm(Form):
+    pass
