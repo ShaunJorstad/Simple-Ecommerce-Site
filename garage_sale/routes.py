@@ -32,9 +32,14 @@ def logout():
     return redirect(url_for("home"))
 
 
+@app.route('/products')
+def product_list():
+    return render_template("products.html")
+
+
 @app.route('/products/<int:product_id>')
 @login_required
-def products(product_id):
+def product(product_id):
     return render_template("products.html")
 
 
@@ -82,7 +87,6 @@ def register():
 
 
 @app.route('/contact')
-@login_required
 def contact():
     return render_template("feedback.html")
 
