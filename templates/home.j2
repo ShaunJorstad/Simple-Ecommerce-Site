@@ -5,24 +5,29 @@
 <html>
 {% block title %}Home{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
-{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+    {{ super() }}
 {% endblock %}
 
 <body>
-    {% block nav %}
+{% block nav %}
     {{ super() }}
-    {% endblock %}
+{% endblock %}
 
 {% block content %}
     <main class="container-fluid">
         <div class="row text-center pt-5">
             <div class="col-md-6 align-self-center">
                 <h2 class="font-weight-bold">Mission Statement</h2>
-                <p class="font-weight-light">Bacon ipsum dolor amet chuck pancetta tongue, strip steak ham hock ribeye short loin leberkas prosciutto hamburger. Prosciutto biltong cow, filet mignon ham sausage capicola picanha. Ham pancetta doner, shank leberkas bresaola kevin jerky flank beef ribs sausage brisket. Cow shankle fatback pork chop chicken spare ribs.</p>
+                <p class="font-weight-light">Bacon ipsum dolor amet chuck pancetta tongue, strip steak ham hock ribeye
+                    short loin leberkas prosciutto hamburger. Prosciutto biltong cow, filet mignon ham sausage capicola
+                    picanha. Ham pancetta doner, shank leberkas bresaola kevin jerky flank beef ribs sausage brisket.
+                    Cow shankle fatback pork chop chicken spare ribs.</p>
             </div>
             <div class="col-md-6">
-                <img class="img-fluid" src="https://www.moneycrashers.com/wp-content/uploads/2011/08/garage-sale-tips-2136x1427.jpg" alt="">
+                <img class="img-fluid"
+                     src="https://www.moneycrashers.com/wp-content/uploads/2011/08/garage-sale-tips-2136x1427.jpg"
+                     alt="">
             </div>
         </div>
 
@@ -35,7 +40,9 @@
         <div class="row pt-5">
             <div class="container">
                 <div class="col-md-12">
-                    <img id="saleImage" src="https://cdn2.ramseysolutions.net/dynamic/media/common_images/article_images/blog_ai_lg/blog_ai_lg_yard_sale.jpg/960w.jpg" alt="" class="img-responsive"/>
+                    <img id="saleImage"
+                         src="https://cdn2.ramseysolutions.net/dynamic/media/common_images/article_images/blog_ai_lg/blog_ai_lg_yard_sale.jpg/960w.jpg"
+                         alt="" class="img-responsive"/>
                 </div>
             </div>
         </div>
@@ -43,21 +50,37 @@
         <div class="row text-center">
             <div id="description" class="col-md-10">
                 <h2 class="font-weight-bold">Drumstick hamburger</h2>
-                <p class="font-weight-light">t-bone pork loin, burgdoggen biltong bacon pastrami flank pig pork sirloin shankle boudin pancetta. Kielbasa cupim porchetta, pastrami pig kevin cow prosciutto biltong leberkas frankfurter bacon. Ball tip tail sirloin biltong. Salami pig spare ribs, chuck picanha kielbasa brisket ribeye shank sausage flank porchetta meatball short ribs. Boudin picanha meatloaf jowl shoulder tri-tip spare ribs hamburger andouille ham pork chop. Shoulder ham beef prosciutto tongue pork loin. Chicken tongue turducken, buffalo ground round capicola frankfurter turkey venison strip steak.
+                <p class="font-weight-light">t-bone pork loin, burgdoggen biltong bacon pastrami flank pig pork sirloin
+                    shankle boudin pancetta. Kielbasa cupim porchetta, pastrami pig kevin cow prosciutto biltong
+                    leberkas frankfurter bacon. Ball tip tail sirloin biltong. Salami pig spare ribs, chuck picanha
+                    kielbasa brisket ribeye shank sausage flank porchetta meatball short ribs. Boudin picanha meatloaf
+                    jowl shoulder tri-tip spare ribs hamburger andouille ham pork chop. Shoulder ham beef prosciutto
+                    tongue pork loin. Chicken tongue turducken, buffalo ground round capicola frankfurter turkey venison
+                    strip steak.
 
-        Boudin turducken turkey beef ribs bresaola meatloaf. Bresaola hamburger swine fatback andouille t-bone. Ribeye short loin doner bresaola short ribs pork belly rump fatback alcatra kielbasa andouille bacon venison. Porchetta prosciutto cupim pastrami shank. Shankle short ribs ball tip short loin, pig spare ribs strip steak turducken. Kielbasa shank strip steak corned beef ground round turkey. Spare ribs buffalo pork belly fatback brisket short ribs bacon, rump swine pastrami leberkas pancetta corned beef doner.</p>
+                    Boudin turducken turkey beef ribs bresaola meatloaf. Bresaola hamburger swine fatback andouille
+                    t-bone. Ribeye short loin doner bresaola short ribs pork belly rump fatback alcatra kielbasa
+                    andouille bacon venison. Porchetta prosciutto cupim pastrami shank. Shankle short ribs ball tip
+                    short loin, pig spare ribs strip steak turducken. Kielbasa shank strip steak corned beef ground
+                    round turkey. Spare ribs buffalo pork belly fatback brisket short ribs bacon, rump swine pastrami
+                    leberkas pancetta corned beef doner.</p>
                 <h2 class="font-weight-bold">Pastrami ham</h2>
-                <p class="font-weight-light">hock ham shank frankfurter pork belly, sausage strip steak landjaeger picanha ball tip. Pork loin cupim kielbasa venison, leberkas tongue cow hamburger ribeye shankle. Ground round capicola pastrami, shoulder tail swine cow leberkas tongue fatback. Shoulder strip steak tri-tip hamburger. Drumstick alcatra chuck landjaeger ham t-bone venison kevin ground round leberkas beef pancetta rump salami. Boudin tail burgdoggen, hamburger pork chop ball tip capicola turkey alcatra landjaeger ham. Alcatra pork loin tongue porchetta tail shoulder cow rump salami bacon pig bresaola.</p>
+                <p class="font-weight-light">hock ham shank frankfurter pork belly, sausage strip steak landjaeger
+                    picanha ball tip. Pork loin cupim kielbasa venison, leberkas tongue cow hamburger ribeye shankle.
+                    Ground round capicola pastrami, shoulder tail swine cow leberkas tongue fatback. Shoulder strip
+                    steak tri-tip hamburger. Drumstick alcatra chuck landjaeger ham t-bone venison kevin ground round
+                    leberkas beef pancetta rump salami. Boudin tail burgdoggen, hamburger pork chop ball tip capicola
+                    turkey alcatra landjaeger ham. Alcatra pork loin tongue porchetta tail shoulder cow rump salami
+                    bacon pig bresaola.</p>
             </div>
         </div>
-
 
 
     </main>
 {% endblock %}
 
 {% block footer %}
-{{ super() }}
+    {{ super() }}
 {% endblock %}
 
 </body>
