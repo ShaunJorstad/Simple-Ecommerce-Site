@@ -1,5 +1,7 @@
 # WebProject
 
-pip install wtforms
-pip install flask_uploads
-pip install flask-reuploaded
+## Run with
+FLASK_APP = garage_sale
+
+## Dependencies
+pip install flask wtforms cryptography flask-reuploaded passlib werkzeug
