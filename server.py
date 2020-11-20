@@ -124,10 +124,13 @@ def logout():
 	logout_helper()
 	return redirect(url_for("home"))
 
-@app.route('/products/<int:productID>')
-@login_required
-def products(productID):
+@app.route('/products')
+def products():
 	return render_template("products.html")
+
+@app.route('/products/<int:productID>')
+def products(productID):
+	return "this is an individual products page"
 
 @app.route('/checkout')
 @login_required
@@ -169,7 +172,6 @@ def register():
 	return render_template('register.j2', form=form) 
 
 @app.route('/contact')
-@login_required
 def contact():
 	return render_template("feedback.html")
 
