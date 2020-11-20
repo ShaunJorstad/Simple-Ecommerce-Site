@@ -1,8 +1,12 @@
-{% extends "base.j2" %}
+{% extends "base/base.j2" %}
+{% import "base/macros.j2" as macro %}
+
 {% block title %}Feedback{% endblock %}
+
 {% block styles %}
-    <link rel="stylesheet" href="/static/styles/feedback.css">
+    {{ macro.css_stylesheet(url_for('static', filename='styles/feedback.css')) }}
 {% endblock %}
+
 {% block content %}
     <body>
     <form>

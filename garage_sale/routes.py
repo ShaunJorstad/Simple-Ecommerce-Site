@@ -52,7 +52,7 @@ def checkout():
 @app.route('/sell')
 @login_required
 def sell():
-    return "this is the page to sell an item"
+    return render_template("create_product.j2")
 
 
 @app.route('/login', methods=['GET', 'POST'])

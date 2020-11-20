@@ -1,15 +1,24 @@
+{% import "base/macros.j2" as macro %}
+
 <!DOCTYPE html>
 <html lang="en">
 {% block head %}
     <head>
         <title>{% block title %}{% endblock %} - GarageSale</title>
         <meta charset="utf-8">
-        {% block styles %}{% endblock %}
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        {% block styles %}
+        {% endblock %}
+
+        {{ macro.css_stylesheet(url_for('static', filename='styles/base.css')) }}
+
+        {% block bootstrap %}
+            {{ macro.css_stylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css') }}
+
+            {{ macro.script('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}
+            {{ macro.script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js') }}
+            {{ macro.script('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js') }}
+        {% endblock %}
     </head>
 {% endblock %}
 
@@ -63,14 +72,15 @@
         </div>
     </nav>
 {% endblock %}
+
 {% block content %}
 {% endblock %}
 
 {% block footer %}
     <footer class="footer pt-5 row">
         <div>
-        <span class="text-muted text-center col-lg-12">
-            <div class="footer-copyright py-3">© 2020 Copyright GarageSale</div>
+        <span class="text-muted text-center col-lg-12 footer-copyright py-3">
+            © 2020 Copyright GarageSale
         </span>
         </div>
     </footer>

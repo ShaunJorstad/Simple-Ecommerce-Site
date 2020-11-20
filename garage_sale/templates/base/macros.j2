@@ -1,0 +1,93 @@
+{% macro script(src, async=false) %}
+    <script
+            {% if async %}
+                async
+            {% endif %}
+                src="{{ src }}"></script>
+{% endmacro %}
+
+{% macro css_stylesheet(href) %}
+    <link rel="stylesheet" href="{{ href }}"/>
+{% endmacro %}
+
+{% macro container() %}
+    <div class="container">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro row() %}
+    <div class="row">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro column(type) %}
+    <div class="{{ type }}">
+        {{ caller() }}
+    </div>
+{% endmacro %}
+
+{% macro form(method='post') %}
+    <form method="{{ method }}">
+        {{ caller() }}
+    </form>
+{% endmacro %}
+
+{% macro form_field(name, type='text', required=false) %}
+    {% set id = name | lower | replace(' ','-') %}
+
+    <div class="form-group">
+        <label for="{{ id }}">{{ name }}</label>
+        <input type="{{ type }}" class="form-control" name="{{ name }}" id="{{ id }}"
+                {% if required %}
+               required
+                {% endif %}
+        />
+    </div>
+{% endmacro %}
+
+{% macro submit_button(name) %}
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">{{ name }}</button>
+    </div>
+{% endmacro %}
+
+{% macro form_select(name, values, required=true) %}
+    {% set id = name | lower | replace(' ','-') %}
+
+    <div class="form-group">
+        <label for="{{ id }}">{{ name }}</label>
+        <select class="form-control" name="{{ name }}" id="{{ id }}"
+                {% if required %}
+                required
+                {% endif %}>
+            {% for value, value_name in values %}
+                <option value="{{ value }}">{{ value_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+{% endmacro %}
+
+{% macro link(link, name='') %}
+    <a href="{{ link }}">
+        {% if name %}
+            <p>{{ name }}</p>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+{% macro table(headers, rows) %}
+    <table class="table">
+        {% for header in headers %}
+            <th scope="col">{{ header }}</th>
+        {% endfor %}
+        {% for row in rows %}
+            <tr>
+                {% for value in row %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+{% endmacro %}
