@@ -1,0 +1,88 @@
+{% import "base/macros.j2" as macro %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+    <head>
+        <title>{% block title %}{% endblock %} - GarageSale</title>
+        <meta charset="utf-8">
+
+        {% block styles %}
+        {% endblock %}
+
+        {{ macro.css_stylesheet(url_for('static', filename='styles/base.css')) }}
+
+        {% block bootstrap %}
+            {{ macro.css_stylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css') }}
+
+            {{ macro.script('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}
+            {{ macro.script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js') }}
+            {{ macro.script('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js') }}
+        {% endblock %}
+    </head>
+{% endblock %}
+
+{% block nav %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">GarageSale</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a id="home" class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a id="products" class="nav-link" href="#">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a id="sell" class="nav-link" href="{{ url_for('sell') }}">Sell</a>
+                </li>
+                <li class="nav-item">
+                    <a id="terms" class="nav-link" href="{{ url_for('terms') }}">Terms</a>
+                </li>
+                <li class="nav-item">
+                    <a id="contact" class="nav-link" href="{{ url_for('contact') }}">Contact Us</a>
+                </li>
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+
+            <ul class="navbar-nav ml-auto">
+                {% if not user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                {% endif %}
+                {% if user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout {{ user[0] }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+    <footer class="footer pt-5 row">
+        <div>
+        <span class="text-muted text-center col-lg-12 footer-copyright py-3">
+            © 2020 Copyright GarageSale
+        </span>
+        </div>
+    </footer>
+{% endblock %}
+</html>
