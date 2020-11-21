@@ -11,7 +11,7 @@ from garage_sale.utils import logout_helper, login_required, authenticate
 
 @app.route('/')
 def home():
-    uid = session.get("uid")
+    uid = session.get("uid", None)
     exp = session.get("expires", None)
 
     if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
@@ -56,9 +56,9 @@ def sell_get():
 @app.route('/sell', methods=['POST'])
 @login_required
 def sell_post():
-    sell_form = CreateProductForm(request.form)
+    sell_form = CreateProductForm()
 
-    if sell_form.validate():
+    if sell_form.validate_on_submit():
         sell_form.to_product().add_to_database()
         return redirect(url_for('home'))
     else:
@@ -74,6 +74,7 @@ def login_get():
 @app.route('/login', methods=['GET', 'POST'])
 def login_post():
     form = LoginForm()
+
     if form.validate_on_submit():
         user = form.to_user()
         authenticate(user)
