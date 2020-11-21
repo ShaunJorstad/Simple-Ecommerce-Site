@@ -49,13 +49,13 @@ def checkout():
 
 
 @app.route('/sell', methods=['GET'])
-#@login_required
+@login_required
 def sell_get():
     return render_template("create_product.j2", form=CreateProductForm())
 
 
 @app.route('/sell', methods=['POST'])
-#@login_required
+@login_required
 def sell_post():
     sell_form = CreateProductForm(request.form)
 

@@ -38,7 +38,7 @@ def login_required(f):
 
         # if uid or exp is missing or exp has passed . . .
         if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
-            return redirect(url_for("login"))
+            return redirect(url_for("login_get"))
 
         # only if the user is logged in should the route handler run
         return f(*args, **kwargs)
