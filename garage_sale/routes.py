@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from flask import session, redirect, url_for, render_template, request, flash
 
 from garage_sale import app, image_dir
-from garage_sale.data_structures import User
 from garage_sale.database import database
 from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm
 from garage_sale.utils import logout_helper, login_required, authenticate
