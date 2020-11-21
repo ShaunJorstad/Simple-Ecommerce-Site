@@ -2,7 +2,6 @@ import os
 from datetime import datetime, timedelta
 
 from flask import session, redirect, url_for, render_template, request, flash
-from werkzeug.datastructures import CombinedMultiDict
 
 from garage_sale import app, image_dir
 from garage_sale.data_structures import User
@@ -68,35 +67,41 @@ def sell_post():
         return redirect(url_for('sell_get'))
 
 
+@app.route('/login', methods=['GET'])
+def login_get():
+    return render_template('login.j2', form=LoginForm())
+
+
 @app.route('/login', methods=['GET', 'POST'])
-def login():
-    # form = RegistrationForm(request.form)
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User(form.email.data, form.password.data)
+def login_post():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = form.to_user()
         authenticate(user)
         return redirect(url_for('home'))
-    form = LoginForm()
-    return render_template('login.j2', form=form)
+    else:
+        flash("Invalid credentials")
+        return render_template('login.j2', form=form)
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm(CombinedMultiDict((request.files, request.form)))
-    if request.method == 'POST' and form.validate():
-        profile = request.files['profile']
-        filetype = profile.filename.split('.')[1]
-        print(filetype)
-        if not (filetype == "jpg" or filetype == "png"):
-            flash("profile must be jpg or png")
-            return redirect(url_for('register'))
-        profile.save(os.path.join(image_dir, str(form.email.data) + '.' + str(filetype)))
-        user = User(form.email.data, form.password.data, form.fname.data, form.lname.data)
-        if user.add_to_database():
-            return redirect(url_for('home'))
+@app.route('/register', methods=['GET'])
+def register_get():
+    return render_template('register.j2', form=RegistrationForm())
 
+
+@app.route('/register', methods=['POST'])
+def register_post():
     form = RegistrationForm()
-    return render_template('register.j2', form=form)
+
+    if form.validate_on_submit():
+        _, extension = os.path.splitext(form.profile_image.data.filename)
+        form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
+
+        if form.to_user().add_to_database():
+            return redirect(url_for('home'))
+    else:
+        flash("Invalid. Please try again.")
+        return render_template('register.j2', form=form)
 
 
 @app.route('/contact')

@@ -1,34 +1,44 @@
 from flask_wtf import FlaskForm
-from wtforms import *
+from flask_wtf.file import FileField
+from wtforms import validators, StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 
 from garage_sale.data_structures import User, Product
 
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', [validators.Length(min=6, max=35)])
+    email = StringField('Email', [validators.Email(), validators.DataRequired()])
     password = PasswordField('Password', [
         validators.DataRequired(),
     ])
     submit = SubmitField('Submit')
 
     def to_user(self):
-        return User(self.email.data, self.password.data)
+        return User(
+            self.email.data,
+            self.password.data
+        )
 
 
 class RegistrationForm(FlaskForm):
-    email = StringField('Email', [validators.Length(min=6, max=35)])
+    email = StringField('Email', [validators.Email(), validators.DataRequired()])
+    fname = StringField('First Name', [validators.required()])
+    lname = StringField('Last Name', [validators.required()])
     password = PasswordField('New Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Confirm Password')
+    profile_image = FileField("Profile Image")
     accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
-    fname = StringField('fname', [validators.required()])
-    lname = StringField('lname', [validators.required()])
     submit = SubmitField('Submit')
 
     def to_user(self):
-        return User(self.email.data, self.password.data, fname=self.fname.data, lname=self.lname.data)
+        return User(
+            self.email.data,
+            self.password.data,
+            self.fname.data,
+            self.lname.data
+        )
 
 
 class CreateProductForm(FlaskForm):
