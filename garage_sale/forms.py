@@ -40,6 +40,25 @@ class RegistrationForm(FlaskForm):
             self.lname.data
         )
 
+class SettingsForm(FlaskForm):
+    email = StringField('Email', [validators.Email()])
+    fname = StringField('First Name')
+    lname = StringField('Last Name')
+    password = PasswordField('New Password', [
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Confirm Password')
+    profile_image = FileField("Profile Image")
+    accept_changes = BooleanField('I accept these changes', [validators.DataRequired()])
+    submit = SubmitField('Confirm Changes')
+
+    def to_user(self):
+        return User(
+            self.email.data,
+            self.password.data,
+            self.fname.data,
+            self.lname.data
+        ) 
 
 class CreateProductForm(FlaskForm):
     posting_title = StringField("Posting Title", [validators.Length(max=120), validators.DataRequired()])

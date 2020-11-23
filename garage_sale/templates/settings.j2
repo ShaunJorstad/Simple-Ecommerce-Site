@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+{% extends "base/base.j2" %}
+{% import "base/macros.j2" as macro %}
+{% import "bootstrap/wtf.html" as wtform %}
+
+<html>
+{% block title %}Terms of Service{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/settings.css') }}">
+{{ super() }}
+{% endblock %}
+
+<body>
+    {% block nav %}
+    {{ super() }}
+    {% endblock %}
+
+{% block content %}
+    <main class="container-fluid">
+        <div class="container content"> 
+            <h1>Settings</h1>
+            <p>Manage your profile settings. We don't store any information that is not listed here, and we do not sell any user information.</p>
+
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ wtform.form_field(form.email) }}
+                {{ wtform.form_field(form.fname) }}
+                {{ wtform.form_field(form.lname) }}
+                {{ wtform.form_field(form.password) }}
+                {{ wtform.form_field(form.confirm) }}
+                {{ wtform.form_field(form.profile_image) }}
+                {{ wtform.form_field(form.accept_changes) }}
+                {{ form.submit(class_='btn btn-primary') }}
+            </form>
+
+            <h1>Uncrecoverable Options</h1>
+            <p>There's no going back...</p>
+            <form action="/deleteAccount/" method="post">
+                <button name="deleteBtn" class="btn btn-danger" type="submit">Delete Account</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
+
+</body>

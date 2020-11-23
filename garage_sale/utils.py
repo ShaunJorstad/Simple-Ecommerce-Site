@@ -16,7 +16,7 @@ def authenticate(user):
         where email=?
     ''', (user.email,)).fetchone()
     if result_hash is None:
-        return redirect(url_for('login'))
+        return redirect(url_for('login_get'))
     elif check_password(user.password, result_hash[0], pep):
         session["uid"] = result_hash[1]
         session["expires"] = datetime.now()
