@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block content %}
-    <body>
+    {{ super() }}
+    <main class="closesCart">
     <form>
         <div class="form-group">
             <label for="InputEmail1">Email address</label>
@@ -33,5 +34,5 @@
         </div>
         <button class="btn btn-primary" type="submit">Send Feedback</button>
     </form>
-    </body>
+    </main>
 {% endblock %}

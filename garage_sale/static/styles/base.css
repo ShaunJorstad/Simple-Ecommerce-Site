@@ -2,3 +2,85 @@ footer {
     background-color: #33383c;
     padding:70px 0;
 }
+
+
+.blur {
+    filter: blur(2px);
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+#cart {
+    height: 80%;
+    width: 400px;
+    border-radius: 40px;
+    position: fixed;
+    background-color: #F9F9F9;
+    z-index: 100;
+    right: 0;
+    margin-right: 15px;
+    margin-top: 30px;
+    padding: 35px;
+}
+
+#cartTitle {
+    font-size: 45px;
+    font-weight: bold;
+    /* color: #2ECC71; */
+}
+
+#cartItems {
+    height: 65%; 
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    overflow: scroll;
+}
+
+
+#cartFoot {
+
+}
+
+.cartItemContainer {
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 25px;
+}
+
+.cost {
+    float: right;
+    font-size: 15px;
+}
+
+.description {
+    opacity: .5;
+}
+
+.itemRemove {
+    /* float: right; */
+    margin-top: 15px; 
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: red;
+    cursor: pointer;
+}
+
+
+#cartPurchaseButton {
+    float: left;
+}
+
+#total {
+    margin-right: 30px;
+    float: right;
+    font-size: 25px;
+}

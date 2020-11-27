@@ -12,6 +12,8 @@
 
         {{ macro.css_stylesheet(url_for('static', filename='styles/base.css')) }}
 
+        {{ macro.script(url_for('static', filename='scripts/main.js'), false)}}
+
         {% block bootstrap %}
             {{ macro.css_stylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css') }}
 
@@ -59,15 +61,15 @@
                 <ul class="navbar-nav ml-auto">
                     {% if not user %}
                         <li class="nav-item">
+                            <a class="nav-link" id="cartButton" href="#">Cart</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login_get') }}">Login</a>
                         </li>
                     {% endif %}
                     {% if user %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('settings')}}">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Cart</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('logout') }}">Logout {{ user[0] }}</a>
@@ -90,6 +92,98 @@
 </header>
 
 {% block content %}
+
+    <div id="cart" class="invisible">
+        <div id="cartHead">
+            <span id="cartTitle">Cart</span> 
+        </div>
+        <div id="cartItems">
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+            <div class="cartItemContainer container">
+                <div class="itemContent">
+                    <span class="title">Item title</span>
+                    <span class="cost">$10</span>
+                    <br>
+                    <span class="description">Item description</span>
+                    <br>
+                    <span onClick="test()" class="itemRemove">Remove</span>
+                </div>
+            </div>
+        </div>
+        <div id="cartFoot">
+            <button type="button" id="cartPurchaseButton" class="btn btn-success">Purchase</button>
+            <span id="total">Total: <span id="totalValue">$0</span></span>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}
