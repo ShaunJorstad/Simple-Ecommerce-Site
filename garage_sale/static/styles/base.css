@@ -1,19 +1,42 @@
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 footer {
     background-color: #33383c;
     padding:70px 0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
 }
 
+main {
+    margin-bottom: 150px; /* bottom = footer height */
+}
+
+main, body, .closesCart {
+    transition: all .35s ease-in-out;
+}
 
 .blur {
     filter: blur(2px);
+    transition: all .35s ease-in-out;
 }
 
 .invisible {
     visibility: hidden;
+    opacity: 0;
+    transition: all .35s ease-in-out;
 }
 
 .visible {
     visibility: visible;
+    opacity: 1;
+    transition: all .35s ease-in-out;
 }
 
 #cart {

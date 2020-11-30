@@ -3,15 +3,24 @@ var cart = {
     items: []
 }
 
+var cartOpen = false;
+
 window.addEventListener('load', (event) => {
     // load cookie
+    if (!document.cookie.includes("cart")) {
+        document.cookie = "cart=[]"
+    }
     for (let item of JSON.parse(document.cookie.split('cart=')[1])) {
         cart.total += item.cost;
         cart.items.push(item);
     }
     console.log(JSON.stringify(cart));
     document.getElementById('cartButton').addEventListener('click', () => {
-        showCart();
+        if (cartOpen) {
+            closeCart();
+        } else {
+            showCart();
+        }
     });
     for (let element of document.getElementsByClassName('closesCart')) {
         element.addEventListener('click', () => {
@@ -29,6 +38,7 @@ function showCart() {
     for (let element of document.getElementsByClassName('closesCart')) {
         element.classList.add('blur');
     }
+    cartOpen = true;
 }
 
 function closeCart() {
@@ -36,6 +46,7 @@ function closeCart() {
     for (let element of document.getElementsByClassName('closesCart')) {
         element.classList.remove('blur');
     }
+    cartOpen = false;
 }
 
 /**
