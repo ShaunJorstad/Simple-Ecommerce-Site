@@ -12,6 +12,7 @@
 
         {{ macro.css_stylesheet(url_for('static', filename='styles/base.css')) }}
 
+        {{ macro.script('https://js.stripe.com/v3/')}}
         {{ macro.script(url_for('static', filename='scripts/main.js'), false)}}
 
         {% block bootstrap %}

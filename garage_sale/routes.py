@@ -1,7 +1,8 @@
 import os
+import stripe
 from datetime import datetime, timedelta
 
-from flask import session, redirect, url_for, render_template, request, flash
+from flask import session, redirect, url_for, render_template, request, flash, jsonify
 
 from garage_sale import app, image_dir
 from garage_sale.database import database
@@ -195,3 +196,52 @@ def move_forward():
     session["expires"] = None
     flash("Account deleted")
     return redirect(url_for('home'))
+
+
+stripe.api_key = 'sk_test_51HtJ0uDZJqO6LNTXtqYjIBSHw2PLfShb1gnPC2mBbZ9QyQfFEd0O46uQJhPPoDaX21OEIltVv4UlQ63I7bW4pgHN00nE7KbjaY'
+
+@app.route('/create-checkout-session', methods=['POST'])
+def create_checkout_session():
+    items = request.form
+    length = int(items.get("length"))
+    lineItems = []
+    for i in range(length):
+        lineItems.append({'price_data': {
+            'currency': 'usd',
+            'product_data': {
+                'name': items.get("name" + str(i)),
+                'description': items.get("description" + str(i))
+            },
+            'unit_amount': int(items.get("price" + str(i))) * 100,
+        },
+        'quantity': 1,
+        })
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items= lineItems,
+        mode='payment',
+        success_url= 'http://127.0.0.1:5000/',
+        cancel_url= 'http://127.0.0.1:5000/',
+    )
+    return jsonify(id=session.id)
+
+'''[{
+        'price_data': {
+            'currency': 'usd',
+            'product_data': {
+            'name': 'T-shirt',
+            },
+            'unit_amount': 5000,
+        },
+        'quantity': 1,
+        },
+        {
+        'price_data': {
+            'currency': 'usd',
+            'product_data': {
+            'name': 'T-shirt 2',
+            },
+            'unit_amount': 6000,
+        },
+        'quantity': 1,
+        }]'''
