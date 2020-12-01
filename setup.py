@@ -12,6 +12,7 @@ setup(
         'flask-reuploaded',
         'passlib',
         'werkzeug',
-        'flask-bootstrap'
+        'flask-bootstrap',
+        'stripe'
     ],
 )
