@@ -9,6 +9,9 @@
 
     float: left;
 }
+#products {
+    color: black;
+}
 
 .product:hover .addToCartBtn {
     visibility: visible;
