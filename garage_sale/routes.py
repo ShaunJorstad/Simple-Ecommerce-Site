@@ -43,9 +43,25 @@ def product_list():
 
 
 @app.route('/products/<int:product_id>')
-@login_required
 def product(product_id):
-    return render_template("products.j2")
+    conn = database()#
+    c = conn.cursor()
+    result = c.execute('''
+       Select id, name, description, price, tags, image_file, condition FROM Products where id=?  
+    ''', (product_id,)).fetchall()
+    if len(result) == 0:
+        return render_template("products.j2")
+    for row in result:
+        id = row[0]
+        name = row[1]
+        description = row[2]
+        price = row[3]
+        print("price " + str(price))
+        tags = row[4].split(', ')
+        image_file = row[5]
+        condition = row[6]
+        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=image_file, condition=condition)
+
 
 
 @app.route('/checkout')

@@ -107,6 +107,19 @@ function purchaseButton(iteminfo) {
   document.cookie = "cart=" + JSON.stringify(cookie);
 }
 
+function addProductToCart(name, cost, description) {
+  product = {
+    "name": name, 
+    "cost": cost, 
+    "description": description
+  }
+  addItemToCart(product);
+  let cookie = JSON.parse(document.cookie.split("cart=")[1]);
+  console.log("current cookie" + cookie);
+  cookie.push(product);
+  document.cookie = "cart=" + JSON.stringify(cookie);
+}
+
 /**
  * Adds the specified item to the cart
  * @param {Object} item
