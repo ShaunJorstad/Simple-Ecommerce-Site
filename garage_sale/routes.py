@@ -47,7 +47,9 @@ def product(product_id):
     conn = database()#
     c = conn.cursor()
     result = c.execute('''
-       Select id, name, description, price, tags, image_file, condition FROM Products where id=?  
+        SELECT id, name, description, price, tags, image_file, condition, user, U.fname, U.lname, U.email, U.profileExt FROM Products
+        JOIN Users U ON Products.user = U.uid
+        WHERE id=?;  
     ''', (product_id,)).fetchall()
     if len(result) == 0:
         return render_template("products.j2")
@@ -56,11 +58,19 @@ def product(product_id):
         name = row[1]
         description = row[2]
         price = row[3]
-        print("price " + str(price))
         tags = row[4].split(', ')
         image_file = row[5]
         condition = row[6]
-        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=image_file, condition=condition)
+        user = row[7]
+        sfName = row[8]
+        slName = row[9] 
+        sEmail = row[10]
+        sExt = row[11]
+        imagePath = os.path.join('images/products', image_file)
+        sellerPath = os.path.join('images/users', sEmail + "." + sExt)
+        sellerName = sfName + " " + slName
+
+        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=imagePath, condition=condition, userID=user, sName=sellerName, sEmail=sEmail, sPath=sellerPath)
 
 
 
@@ -125,7 +135,7 @@ def register_post():
         _, extension = os.path.splitext(form.profile_image.data.filename)
         form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
 
-        if form.to_user().add_to_database():
+        if form.to_user().add_to_database(extension):
             return redirect(url_for('home'))
     else:
         flash("Invalid. Please try again.")

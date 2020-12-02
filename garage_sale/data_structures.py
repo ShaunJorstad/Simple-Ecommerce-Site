@@ -13,16 +13,16 @@ class User:
         self.fname = fname
         self.lname = lname
 
-    def add_to_database(self):
+    def add_to_database(self, extension=""):
         """Adds this user to the database"""
         pw_hash = hash_password(self.password, pep)
 
         conn = database()
         c = conn.cursor()
         c.execute('''
-            INSERT into Users (email, hash, fname, lname)
-            VALUES (?,?,?,?);
-        ''', (self.email, pw_hash, self.fname, self.lname))
+            INSERT into Users (email, hash, fname, lname, profileExt)
+            VALUES (?,?,?,?, ?);
+        ''', (self.email, pw_hash, self.fname, self.lname, extension))
         uid = c.lastrowid
         conn.commit()
 
