@@ -3,6 +3,12 @@
 {% import "base/macros.j2" as macro %}
 {% import "bootstrap/wtf.html" as wtform %}
 
+{% block title %}Home{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/create.css') }}">
+    {{ super() }}
+{% endblock %}
+
 {% block content %}
     {% call macro.container() %}
         <div class="page-header">

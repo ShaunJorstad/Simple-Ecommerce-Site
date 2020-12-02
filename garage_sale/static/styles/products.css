@@ -8,6 +8,9 @@
 
     float: left;
 }
+#products {
+    color: black;
+}
 
 .prodImg{
     display: block;
