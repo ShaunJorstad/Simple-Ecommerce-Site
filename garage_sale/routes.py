@@ -34,7 +34,12 @@ def logout():
 
 @app.route('/products')
 def product_list():
-    return render_template("products.j2")
+    db = database()
+    c = db.cursor()
+
+    pList = c.execute("SELECT * FROM Products").fetchall()
+
+    return render_template("products.j2", products = pList)
 
 
 @app.route('/products/<int:product_id>')
