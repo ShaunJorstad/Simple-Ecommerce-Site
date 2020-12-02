@@ -11,81 +11,13 @@
 <body>
     {{ super() }}
     <div class="closesCart container">
-        <div class="row">
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-            <div class="col">
-                <div class="product" id="prodID">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">Product Title</h3>
-                    <p class="price">Price</p>
-                </div>            
-            </div>
-
-        </div>
+        {% for p in products %}
+            <div class="product" id="{{p[0]}}">
+                <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
+                <h3 class="prodTitle">{{p[1]}}</h3>
+                <p class="price">{{p[2]}}</p>
+            </div>       
+        {% endfor %}     
     </div>
 </body>
 {% endblock %}
