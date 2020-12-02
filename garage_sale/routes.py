@@ -32,13 +32,21 @@ def logout():
     return redirect(url_for("home"))
 
 
-@app.route('/products')
+@app.route('/products', methods=['GET', 'POST'])
 def product_list():
     db = database()
     c = db.cursor()
 
-    pList = c.execute("SELECT * FROM Products").fetchall()
 
+    if request.method == 'POST':
+        value = request.form.get("value")
+        if value:
+            pList = c.execute('''
+            SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
+            ''').fetchall()
+            return render_template("products.j2", products = pList)
+
+    pList = c.execute("SELECT * FROM Products").fetchall()
     return render_template("products.j2", products = pList)
 
 
@@ -255,24 +263,3 @@ def create_checkout_session():
         cancel_url= 'http://127.0.0.1:5000/',
     )
     return jsonify(id=session.id)
-
-'''[{
-        'price_data': {
-            'currency': 'usd',
-            'product_data': {
-            'name': 'T-shirt',
-            },
-            'unit_amount': 5000,
-        },
-        'quantity': 1,
-        },
-        {
-        'price_data': {
-            'currency': 'usd',
-            'product_data': {
-            'name': 'T-shirt 2',
-            },
-            'unit_amount': 6000,
-        },
-        'quantity': 1,
-        }]'''
