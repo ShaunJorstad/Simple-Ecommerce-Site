@@ -244,13 +244,14 @@ def create_checkout_session():
     length = int(items.get("length"))
     lineItems = []
     for i in range(length):
+        print(items.get("name" + str(i)))
         lineItems.append({'price_data': {
             'currency': 'usd',
             'product_data': {
                 'name': items.get("name" + str(i)),
                 'description': items.get("description" + str(i))
             },
-            'unit_amount': int(items.get("price" + str(i))) * 100,
+            'unit_amount': int(float(items.get("price" + str(i))) * 100.0),
         },
         'quantity': 1,
         })
