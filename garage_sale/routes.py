@@ -1,14 +1,15 @@
 import os
-import stripe
+import uuid
 from datetime import datetime, timedelta
 
+import stripe
 from flask import session, redirect, url_for, render_template, request, flash, jsonify
 
-from garage_sale import app, image_dir
+from garage_sale import app, user_image_dir, product_image_dir
 from garage_sale.database import database
 from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm, SettingsForm
-from garage_sale.utils import logout_helper, login_required, authenticate
 from garage_sale.security import hash_password, pep
+from garage_sale.utils import logout_helper, login_required, authenticate
 
 
 @app.route('/')
@@ -36,7 +37,6 @@ def logout():
 def product_list():
     db = database()
     c = db.cursor()
-
 
     if request.method == 'POST':
         value = request.form.get("value")
@@ -99,7 +99,18 @@ def sell_post():
     sell_form = CreateProductForm()
 
     if sell_form.validate_on_submit():
-        sell_form.to_product().add_to_database()
+        print(sell_form.image_file.data)
+        _, extension = os.path.splitext(sell_form.image_file.data.filename)
+        image_file_name = str(uuid.uuid1()) + extension
+
+        sell_form.image_file.data.save(os.path.join(product_image_dir, image_file_name))
+
+        print(session.get("uid", None))
+
+        new_product = sell_form.to_product(session.get("uid", None))
+        new_product.set_image_name(image_file_name)
+
+        new_product.add_to_database()
         return redirect(url_for('home'))
     else:
         flash("Invalid. Please try again.")
@@ -114,7 +125,6 @@ def login_get():
 @app.route('/login', methods=['GET', 'POST'])
 def login_post():
     form = LoginForm()
-
 
     if form.validate_on_submit():
         user = form.to_user()
@@ -140,7 +150,7 @@ def register_post():
 
     if form.validate_on_submit():
         _, extension = os.path.splitext(form.profile_image.data.filename)
-        form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
+        form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
 
         if form.to_user().add_to_database(extension):
             return redirect(url_for('home'))
@@ -203,10 +213,10 @@ def settings():
 
         if form.profile_image.data is not None:
             _, extension = os.path.splitext(form.profile_image.data.filename)
-            form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
+            form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
         else:
-            old_profile = os.path.join(image_dir, str(usr[2])) + '.jpg'
-            new_profile = os.path.join(image_dir, form.email.data) + '.jpg'
+            old_profile = os.path.join(user_image_dir, str(usr[2])) + '.jpg'
+            new_profile = os.path.join(user_image_dir, form.email.data) + '.jpg'
             os.rename(r''+old_profile ,r''+new_profile)
 
         flash("Settings have been updated")

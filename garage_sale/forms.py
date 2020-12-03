@@ -69,10 +69,11 @@ class CreateProductForm(FlaskForm):
     condition = SelectField("Condition", choices=[("new", "New"), ("used", "Used")])
     create_posting = SubmitField("Create Posting")
 
-    def to_product(self):
+    def to_product(self, user):
         return Product(
             self.posting_title.data,
             self.price.data,
+            user,
             self.description.data,
             self.tags.data,
             self.image_file.data,

@@ -1,4 +1,3 @@
-
 {% extends "base/base.j2" %}
 {% import "base/macros.j2" as macro %}
 
@@ -8,21 +7,27 @@
     {{ macro.css_stylesheet(url_for('static', filename='styles/products.css')) }}
 {% endblock %}
 {% block content %}
-<body>
+    <body>
     {{ super() }}
     <div class="closesCart container">
         {% for p in products %}
-                <div class="product" id="{{p[0]}}">
-                    <a href="{{ url_for('product', product_id=p[0])}}">
-                    <img class="prodImg" src="/static/images/prodID.jpg" alt="product image">
-                    <h3 class="prodTitle">{{p[1]}}</h3>
-                    <p class="price">${{p[2]}}</p>
-                    </a>
-                    <div class="center">
-                        <button onclick="addProductToCart('{{p[1]}}', {{p[2]}}, '{{p[3]}}')"  class="btn btn-primary addToCartBtn">Add To Cart</button>
+            <div class="product" id="{{ p[0] }}">
+                <a href="{{ url_for('product', product_id=p[0]) }}">
+                    <div class="product-image">
+                        <img class="prodImg"
+                             src="{{ url_for('static', filename=('images/products/' + p[5]) if p[5] else "images/product_image_not_available.png") }}"
+                             alt="product image">
                     </div>
-                </div>       
-        {% endfor %}     
+                    <h3 class="prodTitle">{{ p[1] }}</h3>
+                    <p class="price">${{ p[2] }}</p>
+                </a>
+                <div class="center">
+                    <button onclick="addProductToCart('{{ p[1] }}', {{ p[2] }}, '{{ p[3] }}')"
+                            class="btn btn-primary addToCartBtn">Add To Cart
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-</body>
+    </body>
 {% endblock %}

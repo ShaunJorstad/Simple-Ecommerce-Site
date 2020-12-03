@@ -19,16 +19,24 @@
     transition: all .35s ease-in-out;
 }
 
-.prodImg{
-    display: block;
-
+.product-image {
     height: 120px;
-    border-radius: 20px;
+    max-width: 188px;
+    overflow: hidden;
 
     /* padding-top: 15px; */
     margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.product-image img {
+    display: block;
+    border-radius: 20px;
+    margin: auto;
+
+    max-width: 188px;
+    max-height: 120px;
 }
 
 .prodTitle{

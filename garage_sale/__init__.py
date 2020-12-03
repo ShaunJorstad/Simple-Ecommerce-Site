@@ -25,7 +25,8 @@ def make_g(function):
 
 
 server_dir = os.path.dirname(__file__)
-image_dir = os.path.join(server_dir, 'static/images/users')
+user_image_dir = os.path.join(server_dir, 'static/images/users')
+product_image_dir = os.path.join(server_dir, 'static/images/products')
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
