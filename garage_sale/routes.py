@@ -74,10 +74,8 @@ def product(product_id):
         slName = row[9] 
         sEmail = row[10]
         sExt = row[11]
-        imagePath = os.path.join('images/products', image_file)
-        sellerPath = os.path.join('images/users', sEmail + "." + sExt)
         sellerName = sfName + " " + slName
-        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=imagePath, condition=condition, userID=user, sName=sellerName, sEmail=sEmail, sPath=sellerPath)
+        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=image_file, condition=condition, userID=user, sName=sellerName, sEmail=sEmail, sPath=sEmail + sExt)
 
 
 
