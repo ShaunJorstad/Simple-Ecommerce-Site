@@ -19,7 +19,7 @@
             <h1>Sell a Product</h1>
         </div>
 
-        {% call macro.form() %}
+        {% call macro.form(enctype="multipart/form-data") %}
             {% call macro.row(h_center=true, v_center=true) %}
                 {% call macro.column('col-md-6') %}
                     {{ form.hidden_tag() }}
@@ -38,14 +38,18 @@
                 {% call macro.column('col-md-6') %}
                     <img class="product-image"
                          id="product-image"
-                         src="{{ url_for('static', filename='images/truck.jpg') }}"
+                         src="{{ url_for('static', filename='images/product_image_not_available.png') }}"
                          alt="posting image">
-                    <input id="image_file" name="image_file" type="file" onchange="loadFile(event, 'product-image')">
+                    <div class="form-group">
+                        <label class="control-label" for="image_file">Image</label>
+                        <input id="image_file" name="image_file" type="file"
+                               onchange="loadFile(event, 'product-image')" required>
+                    </div>
                 {% endcall %}
             {% endcall %}
 
             {% call macro.row(h_center=true) %}
-                {{ wtform.form_field(form.create_posting) }}
+                <button class="btn btn-primary submit-button" type="submit">Create Posting</button>
             {% endcall %}
         {% endcall %}
     {% endcall %}

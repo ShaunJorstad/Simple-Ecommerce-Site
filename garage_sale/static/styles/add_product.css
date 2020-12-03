@@ -1,8 +1,12 @@
 .product-image {
   margin: 16px;
-  max-width: 500px;
+  max-width: 400px;
   min-width: 200px;
   height: auto;
+}
+
+.submit-button {
+  margin: 32px 8px 8px 8px;
 }
 
 #sell {

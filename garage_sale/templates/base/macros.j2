@@ -28,8 +28,8 @@
     </div>
 {% endmacro %}
 
-{% macro form(method='post') %}
-    <form method="{{ method }}">
+{% macro form(method='post', enctype='') %}
+    <form method="{{ method }}" {% if enctype != '' %} enctype="{{ enctype }}" {% endif %}>
         {{ caller() }}
     </form>
 {% endmacro %}

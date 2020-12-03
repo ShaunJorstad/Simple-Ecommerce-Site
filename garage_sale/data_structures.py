@@ -41,6 +41,9 @@ class Product:
         self.image_file = image_file
         self.condition = condition
 
+    def set_image_name(self, image_name):
+        self.image_file = image_name
+
     def add_to_database(self):
         conn = database()
         c = conn.cursor()
