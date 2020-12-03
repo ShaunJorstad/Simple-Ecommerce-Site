@@ -132,3 +132,5 @@ dmypy.json
 .vscode/
 # Pycharm
 .idea/
+/yarn.lock
+/node_modules/

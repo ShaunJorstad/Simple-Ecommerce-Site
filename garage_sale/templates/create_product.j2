@@ -3,6 +3,14 @@
 {% import "base/macros.j2" as macro %}
 {% import "bootstrap/wtf.html" as wtform %}
 
+{% block styles %}
+    {{ macro.css_stylesheet(url_for('static', filename='styles/add_product.css')) }}
+{% endblock %}
+
+{% block scripts %}
+    {{ macro.script(url_for('static', filename='scripts/displayUploadedImage.js')) }}
+{% endblock %}
+
 {% block content %}
     {% call macro.container() %}
         <div class="page-header">
@@ -26,8 +34,11 @@
                     {{ wtform.form_field(form.condition) }}
                 {% endcall %}
                 {% call macro.column('col-md-6') %}
-                    <img src="{{ url_for('static', filename='images/truck.jpg') }}" alt="posting image">
-                    {{ wtform.form_field(form.image_file) }}
+                    <img class="product-image"
+                         id="product-image"
+                         src="{{ url_for('static', filename='images/truck.jpg') }}"
+                         alt="posting image">
+                    <input id="image_file" name="image_file" type="file" onchange="loadFile(event, 'product-image')">
                 {% endcall %}
             {% endcall %}
 
