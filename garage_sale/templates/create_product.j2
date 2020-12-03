@@ -3,6 +3,8 @@
 {% import "base/macros.j2" as macro %}
 {% import "bootstrap/wtf.html" as wtform %}
 
+{% block title %}Sell A Product{% endblock %}
+
 {% block styles %}
     {{ macro.css_stylesheet(url_for('static', filename='styles/add_product.css')) }}
 {% endblock %}

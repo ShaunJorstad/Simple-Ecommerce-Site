@@ -1,0 +1,35 @@
+{% extends "base/base.j2" %}
+{% import "base/macros.j2" as macro %}
+
+{% block title %}{{name}}{% endblock %}
+
+{% block styles %}
+    {{ macro.css_stylesheet(url_for('static', filename='styles/product.css')) }}
+    {{ macro.script(url_for('static', filename='scripts/product.js'), false)}}
+{% endblock %}
+{% block content %}
+<body>
+    {{ super() }}
+    <div class="itemContainer closesCart container">
+
+        <div class="row justify-content-md-center">
+            <div id="left" class="col-lg">
+                <h1 id="productName">{{name}}</h1>
+                <p id="productDescription">{{description}}</p>
+                <button onclick="addProductToCart('{{name}}', {{price}}, '{{description}}')" type="button" class="addToCartButton btn btn-primary">Add to cart</button>
+            </div>
+            <div id="right" class="col-lg h-100">
+                <img class="productImage" src="{{ url_for('static', filename=image_file) }}"> 
+            </div>
+        </div>  
+    </div>
+    <div class="sellerContainer closesCart container">
+        <h1>Seller Info</h1>
+        <div class="sellerProfileContainer">
+            <img class="sellerImage" src="{{ url_for('static', filename=sPath) }}"> 
+        </div>
+        <h5>Name: {{sName}}</h5> 
+        <h5>Email: {{sEmail}}</h5>
+    </div>
+</body>
+{% endblock %}

@@ -32,20 +32,53 @@ def logout():
     return redirect(url_for("home"))
 
 
-@app.route('/products')
+@app.route('/products', methods=['GET', 'POST'])
 def product_list():
     db = database()
     c = db.cursor()
 
-    pList = c.execute("SELECT * FROM Products").fetchall()
 
+    if request.method == 'POST':
+        value = request.form.get("value")
+        if value:
+            pList = c.execute('''
+            SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
+            ''').fetchall()
+            return render_template("products.j2", products = pList)
+
+    pList = c.execute("SELECT * FROM Products").fetchall()
     return render_template("products.j2", products = pList)
 
 
 @app.route('/products/<int:product_id>')
-@login_required
 def product(product_id):
-    return render_template("products.j2")
+    conn = database()#
+    c = conn.cursor()
+    result = c.execute('''
+        SELECT id, name, description, price, tags, image_file, condition, user, U.fname, U.lname, U.email, U.profileExt FROM Products
+        JOIN Users U ON Products.user = U.uid
+        WHERE id=?;  
+    ''', (product_id,)).fetchall()
+    if len(result) == 0:
+        return render_template("products.j2")
+    for row in result:
+        id = row[0]
+        name = row[1]
+        description = row[2]
+        price = row[3]
+        tags = row[4].split(', ')
+        image_file = row[5]
+        condition = row[6]
+        user = row[7]
+        sfName = row[8]
+        slName = row[9] 
+        sEmail = row[10]
+        sExt = row[11]
+        imagePath = os.path.join('images/products', image_file)
+        sellerPath = os.path.join('images/users', sEmail + "." + sExt)
+        sellerName = sfName + " " + slName
+        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=imagePath, condition=condition, userID=user, sName=sellerName, sEmail=sEmail, sPath=sellerPath)
+
 
 
 @app.route('/checkout')
@@ -109,7 +142,7 @@ def register_post():
         _, extension = os.path.splitext(form.profile_image.data.filename)
         form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
 
-        if form.to_user().add_to_database():
+        if form.to_user().add_to_database(extension):
             return redirect(url_for('home'))
     else:
         flash("Invalid. Please try again.")
@@ -211,13 +244,14 @@ def create_checkout_session():
     length = int(items.get("length"))
     lineItems = []
     for i in range(length):
+        print(items.get("name" + str(i)))
         lineItems.append({'price_data': {
             'currency': 'usd',
             'product_data': {
                 'name': items.get("name" + str(i)),
                 'description': items.get("description" + str(i))
             },
-            'unit_amount': int(items.get("price" + str(i))) * 100,
+            'unit_amount': int(float(items.get("price" + str(i))) * 100.0),
         },
         'quantity': 1,
         })
@@ -229,24 +263,3 @@ def create_checkout_session():
         cancel_url= 'http://127.0.0.1:5000/',
     )
     return jsonify(id=session.id)
-
-'''[{
-        'price_data': {
-            'currency': 'usd',
-            'product_data': {
-            'name': 'T-shirt',
-            },
-            'unit_amount': 5000,
-        },
-        'quantity': 1,
-        },
-        {
-        'price_data': {
-            'currency': 'usd',
-            'product_data': {
-            'name': 'T-shirt 2',
-            },
-            'unit_amount': 6000,
-        },
-        'quantity': 1,
-        }]'''
