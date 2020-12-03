@@ -105,7 +105,9 @@ def sell_post():
 
         sell_form.image_file.data.save(os.path.join(product_image_dir, image_file_name))
 
-        new_product = sell_form.to_product()
+        print(session.get("uid", None))
+
+        new_product = sell_form.to_product(session.get("uid", None))
         new_product.set_image_name(image_file_name)
 
         new_product.add_to_database()
@@ -123,7 +125,6 @@ def login_get():
 @app.route('/login', methods=['GET', 'POST'])
 def login_post():
     form = LoginForm()
-
 
     if form.validate_on_submit():
         user = form.to_user()

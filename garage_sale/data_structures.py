@@ -33,13 +33,14 @@ class User:
 
 
 class Product:
-    def __init__(self, name, price, description="", tags="", image_file="", condition=""):
+    def __init__(self, name, price, user, description="", tags="", image_file="", condition=""):
         self.name = name
         self.price = price
         self.description = description
         self.tags = tags
         self.image_file = image_file
         self.condition = condition
+        self.user = user
 
     def set_image_name(self, image_name):
         self.image_file = image_name
@@ -48,7 +49,7 @@ class Product:
         conn = database()
         c = conn.cursor()
         c.execute('''
-            INSERT into Products (name, price, description, tags, image_file, condition)
-            VALUES (?, ?, ?, ?, ?, ?);
-        ''', (self.name, self.price, self.description, self.tags, self.image_file, self.condition))
+            INSERT into Products (name, price, description, tags, image_file, condition, user)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        ''', (self.name, self.price, self.description, self.tags, self.image_file, self.condition, self.user))
         conn.commit()
