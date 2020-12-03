@@ -19,7 +19,7 @@
                 <button onclick="addProductToCart('{{name}}', {{price}}, '{{description}}')" type="button" class="addToCartButton btn btn-primary">Add to cart</button>
             </div>
             <div id="right" class="col-lg h-100">
-                <img class="productImage" src="{{ url_for('static', filename='images/products/' + image_file) }}">
+                <img class="productImage" src="{{ url_for('static', filename='images/products/' + image_file) if image_file else url_for('static', filename='images/product_image_not_available.png')}}">
             </div>
         </div>  
     </div>
