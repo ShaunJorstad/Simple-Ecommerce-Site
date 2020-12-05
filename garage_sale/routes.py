@@ -10,6 +10,7 @@ from garage_sale.database import database
 from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm, SettingsForm
 from garage_sale.security import hash_password, pep
 from garage_sale.utils import logout_helper, login_required, authenticate
+from garage_sale.mail import mailer
 
 
 @app.route('/')
@@ -157,9 +158,26 @@ def register_post():
         return render_template('register.j2', form=form)
 
 
-@app.route('/contact')
+@app.route('/contact', methods=["GET"])
 def contact():
     return render_template("feedback.j2")
+
+@app.route('/contact', methods=["POST"])
+def contactEmail():
+    email = request.form.get("email")
+    subject = request.form.get("subject")
+    complaint = request.form.get("complaint")
+
+    sub = f"Customer feedback about {subject}"
+
+    print(email)
+    print(subject)
+    print(complaint)
+
+    mailSvr = mailer()
+    mailSvr.sendMail(email, sub, complaint)
+
+    return redirect(url_for('home'))
 
 
 @app.route('/terms')
