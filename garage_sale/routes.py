@@ -201,19 +201,6 @@ def settings():
     ''', (uid,)).fetchone()
 
     if form.validate_on_submit() and request.method == 'POST': 
-        if (form.profile_image.data is not None):
-            _, extension = os.path.splitext(form.profile_image.data.filename)
-            form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
-            conn = database()
-            c = conn.cursor()
-            c.execute('''
-                UPDATE Users
-                SET profileExt = ? 
-                where uid=?
-            ''', (extension, uid))
-            conn.commit()
-
-
         if form.password.data != '' and form.password.data != form.confirm.data:
             flash("passwords must match")
         elif form.password.data != '':
@@ -233,12 +220,27 @@ def settings():
             ''', (form.email.data, form.fname.data, form.lname.data, uid))
             conn.commit()
 
+        conn = database()  
+        cursor = conn.cursor()
+        row = cursor.execute(''' 
+            SELECT profileExt FROM Users where uid=? 
+        ''', (uid,)).fetchone()
+        oldExt = row[0] 
+
         if form.profile_image.data is not None:
             _, extension = os.path.splitext(form.profile_image.data.filename)
             form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
-        else:
-            old_profile = os.path.join(user_image_dir, str(usr[2])) + '.jpg'
-            new_profile = os.path.join(user_image_dir, form.email.data) + '.jpg'
+            conn = database()
+            c = conn.cursor()
+            c.execute('''
+                UPDATE Users
+                SET profileExt = ? 
+                where uid=?
+            ''', (extension, uid))
+            conn.commit()
+        else: 
+            old_profile = os.path.join(user_image_dir, str(usr[2])) + oldExt
+            new_profile = os.path.join(user_image_dir, form.email.data) + oldExt
             os.rename(r''+old_profile ,r''+new_profile)
 
         flash("Settings have been updated")
