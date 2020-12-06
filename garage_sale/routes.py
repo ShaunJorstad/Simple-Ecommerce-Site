@@ -1,4 +1,5 @@
 import os
+import string, random
 import uuid
 from datetime import datetime, timedelta
 
@@ -7,7 +8,7 @@ from flask import session, redirect, url_for, render_template, request, flash, j
 
 from garage_sale import app, user_image_dir, product_image_dir
 from garage_sale.database import database
-from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm, SettingsForm
+from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm, SettingsForm, RecoverPasswordForm
 from garage_sale.security import hash_password, pep
 from garage_sale.utils import logout_helper, login_required, authenticate
 from garage_sale.mail import mailer
@@ -153,8 +154,10 @@ def register_post():
 
     if form.validate_on_submit():
         _, extension = os.path.splitext(form.profile_image.data.filename)
-        
         form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
+
+        mailSvr = mailer()
+        mailSvr.sendMail(form.email.data, "Welcome to Garage Sale!", "Thank you for signing up to sell items on our platform. If you did not sign up for this account please reply directly to this email stating such.")
 
         if form.to_user().add_to_database(extension):
             return redirect(url_for('home'))
@@ -258,7 +261,11 @@ def settings():
 @app.route("/deleteAccount/", methods=['POST'])
 def move_forward():
     #Moving forward code
-    userId = session.get('uid')
+    userId = session.get('uid', None)
+    if userId is None:
+        flash("Must be signed in to delete account")
+        return redirect(url_for('home'))
+
     db = database() 
     db.cursor().execute(''' 
         DELETE FROM Users WHERE uid=?;
@@ -268,6 +275,30 @@ def move_forward():
     session["expires"] = None
     flash("Account deleted")
     return redirect(url_for('home'))
+
+@app.route("/recoverPassword", methods=['GET'])
+def recoverPassword_get():
+    return render_template('recoverPassword.j2', form=RecoverPasswordForm())
+
+@app.route("/recoverPassword", methods=['POST'])
+def recoverPassword_post():
+    form = RecoverPasswordForm()
+
+    if form.validate_on_submit():
+        plainText = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(15))
+        hash = hash_password(plainText, pep)
+        conn = database()
+        conn.cursor().execute(''' 
+            UPDATE Users set hash=? where email=?;
+        ''', (hash, form.email.data))
+        conn.commit()
+
+        # email password
+        mailSvr = mailer()
+        mailSvr.sendMail(form.email.data, 'Reset Password', 'Your password has been reset. Please login with the new temporary password: ' + plainText + ' and change it immediately')
+        return redirect(url_for('login_get'))
+    return render_template('recoverPassword.j2')
+
 
 
 stripe.api_key = 'sk_test_51HtJ0uDZJqO6LNTXtqYjIBSHw2PLfShb1gnPC2mBbZ9QyQfFEd0O46uQJhPPoDaX21OEIltVv4UlQ63I7bW4pgHN00nE7KbjaY'

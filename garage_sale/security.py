@@ -30,3 +30,4 @@ def check_password(pwd, b64ph, pep):
     ph = base64.b64decode(b64ph)
     h = pep.decrypt(ph)
     return argon2.verify(pwd, h)
+

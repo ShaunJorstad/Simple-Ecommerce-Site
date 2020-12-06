@@ -24,6 +24,8 @@ window.addEventListener('load', (event) => {
   for (let element of document.getElementsByClassName('closesCart')) {
     element.addEventListener('click', closeCart);
   }
+
+
 }
 );
 

@@ -18,6 +18,9 @@ class LoginForm(FlaskForm):
             self.password.data
         )
 
+class RecoverPasswordForm(FlaskForm):
+    email = StringField('Email', [validators.Email(), validators.DataRequired()])
+    submit = SubmitField('Submit')
 
 class RegistrationForm(FlaskForm):
     email = StringField('Email', [validators.Email(), validators.DataRequired()])
