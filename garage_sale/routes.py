@@ -128,7 +128,8 @@ def login_post():
     if form.validate_on_submit():
         user = form.to_user()
         authenticate(user)
-        if session["uid"] != None:
+        uid = session.get("uid", None)
+        if uid != None:
             return redirect(url_for('home'))
         else: 
             flash('invalid login credentials')
@@ -149,6 +150,7 @@ def register_post():
 
     if form.validate_on_submit():
         _, extension = os.path.splitext(form.profile_image.data.filename)
+        
         form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
 
         if form.to_user().add_to_database(extension):

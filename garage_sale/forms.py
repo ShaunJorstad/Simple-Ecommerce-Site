@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import validators, StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 
 from garage_sale.data_structures import User, Product
@@ -27,8 +27,8 @@ class RegistrationForm(FlaskForm):
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
-    confirm = PasswordField('Confirm Password')
-    profile_image = FileField("Profile Image")
+    confirm = PasswordField('Confirm Password', [validators.DataRequired()])
+    profile_image = FileField("Profile Image", [FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
     accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
     submit = SubmitField('Submit')
 
