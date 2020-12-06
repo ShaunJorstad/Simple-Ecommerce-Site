@@ -48,7 +48,7 @@ class SettingsForm(FlaskForm):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Confirm Password')
-    profile_image = FileField("Profile Image")
+    profile_image = FileField("Profile Image", [FileAllowed(['jpg', 'png'], 'Images only!')])
     accept_changes = BooleanField('I accept these changes', [validators.DataRequired()])
     submit = SubmitField('Confirm Changes')
 

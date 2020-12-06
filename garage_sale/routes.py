@@ -12,20 +12,22 @@ from garage_sale.security import hash_password, pep
 from garage_sale.utils import logout_helper, login_required, authenticate
 from garage_sale.mail import mailer
 
-
-@app.route('/')
-def home():
+def getUser():
     uid = session.get("uid", None)
     exp = session.get("expires", None)
 
     if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
-        return render_template("home.j2", user=None)
-    else:
-        db = database()
-        usr = db.cursor().execute('''
-            SELECT fname, lname, email FROM users WHERE uid=?
-        ''', (uid,)).fetchone()
-        return render_template("home.j2", user=usr)
+        return None
+
+    db = database()
+    usr = db.cursor().execute('''
+        SELECT fname, lname, email FROM users WHERE uid=?
+    ''', (uid,)).fetchone()
+    return usr
+
+@app.route('/')
+def home():
+    return render_template("home.j2", user=getUser())
 
 
 @app.route("/logout/")
@@ -45,10 +47,11 @@ def product_list():
             pList = c.execute('''
             SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
             ''').fetchall()
-            return render_template("products.j2", products = pList)
+            return render_template("products.j2", products = pList, user=getUser())
 
     pList = c.execute("SELECT * FROM Products").fetchall()
-    return render_template("products.j2", products = pList)
+    
+    return render_template("products.j2", products = pList, user=getUser())
 
 
 @app.route('/products/<int:product_id>')
@@ -89,7 +92,7 @@ def checkout():
 @app.route('/sell', methods=['GET'])
 @login_required
 def sell_get():
-    return render_template("create_product.j2", form=CreateProductForm())
+    return render_template("create_product.j2", form=CreateProductForm(), user=getUser())
 
 
 @app.route('/sell', methods=['POST'])
@@ -141,7 +144,7 @@ def login_post():
 
 @app.route('/register', methods=['GET'])
 def register_get():
-    return render_template('register.j2', form=RegistrationForm())
+    return render_template('register.j2', form=RegistrationForm(), user=getUser())
 
 
 @app.route('/register', methods=['POST'])
@@ -157,12 +160,12 @@ def register_post():
             return redirect(url_for('home'))
     else:
         flash("Invalid. Please try again.")
-        return render_template('register.j2', form=form)
+        return render_template('register.j2', form=form, user=getUser())
 
 
 @app.route('/contact', methods=["GET"])
 def contact():
-    return render_template("feedback.j2")
+    return render_template("feedback.j2", user=getUser())
 
 @app.route('/contact', methods=["POST"])
 def contactEmail():
@@ -184,17 +187,7 @@ def contactEmail():
 
 @app.route('/terms')
 def terms():
-    uid = session.get("uid")
-    exp = session.get("expires", None)
-
-    if uid is None or exp is None or exp > (datetime.now() + timedelta(hours=1)):
-        return render_template("terms.j2", user=None)
-    else:
-        db = database()
-        usr = db.cursor().execute('''
-            SELECT fname, lname, email FROM users WHERE uid=?
-        ''', (uid,)).fetchone()
-        return render_template("terms.j2", user=usr)
+    return render_template("terms.j2", user=getUser())
 
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
@@ -207,9 +200,20 @@ def settings():
         SELECT fname, lname, email FROM users WHERE uid=?
     ''', (uid,)).fetchone()
 
-    if form.validate_on_submit() and request.method == 'POST':
-        # _, extension = os.path.splitext(form.profile_image.data.filename)
-        # form.profile_image.data.save(os.path.join(image_dir, str(form.email.data) + extension))
+    if form.validate_on_submit() and request.method == 'POST': 
+        if (form.profile_image.data is not None):
+            _, extension = os.path.splitext(form.profile_image.data.filename)
+            form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
+            conn = database()
+            c = conn.cursor()
+            c.execute('''
+                UPDATE Users
+                SET profileExt = ? 
+                where uid=?
+            ''', (extension, uid))
+            conn.commit()
+
+
         if form.password.data != '' and form.password.data != form.confirm.data:
             flash("passwords must match")
         elif form.password.data != '':
