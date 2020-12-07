@@ -47,20 +47,51 @@ def product_list():
     db = database()
     c = db.cursor()
 
+    tags = c.execute("""
+        SELECT tags FROM Products
+    """).fetchmany(20)
+
+    tag_set = set()
+
+    for tag_list in tags:
+        tag_set = tag_set.union(set(map(str.strip, tag_list[0].split(","))))
+
     if request.method == 'POST':
         value = request.form.get("value")
         if value:
             products = c.execute('''
             SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
             ''').fetchall()
-            return render_template("products.j2", products=products, user=getUser())
+            return render_template("products.j2", products=products, user=getUser(), tags=list(tag_set))
 
     if uid is None:
         products = c.execute("SELECT * FROM Products").fetchall()
     else:
         products = c.execute("SELECT * FROM Products WHERE user = ?", (uid,)).fetchall()
 
-    return render_template("products.j2", products=products, user=getUser())
+    return render_template("products.j2", products=products, user=getUser(), tags=list(tag_set))
+
+
+@app.route('/products/<string:tag>')
+def product_list_filtered(tag):
+    db = database()
+    cursor = db.cursor()
+
+    tags = cursor.execute("""
+        SELECT tags FROM Products
+    """).fetchmany(20)
+
+    tag_set = set()
+
+    for tag_list in tags:
+        tag_set = tag_set.union(set(map(str.strip, tag_list[0].split(","))))
+
+    products = cursor.execute('''
+        SELECT * FROM Products WHERE tags LIKE '%''' + tag + '''%';
+        ''').fetchall()
+
+    return render_template("products.j2", products=products, user=getUser(), tags=list(tag_set))
+
 
 @app.route("/edit/product/<int:product_id>", methods=['GET'])
 def edit_product_get(product_id):
@@ -102,7 +133,7 @@ def edit_product_post(product_id):
         else:
             new_product.set_image_name(old_product.image_file)
 
-        new_product.tags = new_product.tags.lower().replace(" ", "")
+        new_product.tags = new_product.tags.lower()
 
         new_product.update_database(product_id)
         return redirect(url_for('product_list'))
@@ -158,7 +189,8 @@ def product(product_id):
         sEmail = row[10]
         sExt = row[11]
         sellerName = sfName + " " + slName
-        return render_template("product.j2", user=getUser(), id=id, name=name, description=description, price=price, tags=tags,
+        return render_template("product.j2", user=getUser(), id=id, name=name, description=description, price=price,
+                               tags=tags,
                                image_file=image_file, condition=condition, userID=user, sName=sellerName, sEmail=sEmail,
                                sPath=sEmail + sExt)
 
@@ -190,7 +222,7 @@ def sell_post():
         new_product = sell_form.to_product(session.get("uid", None))
         new_product.set_image_name(image_file_name)
 
-        new_product.tags = new_product.tags.lower().replace(" ", "")
+        new_product.tags = new_product.tags.lower()
 
         new_product.add_to_database()
         return redirect(url_for('product_list'))

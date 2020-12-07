@@ -9,6 +9,13 @@
 {% block content %}
     <body>
     {{ super() }}
+    <div class="filter-list">
+        <h3>Tags</h3>
+        {% for tag in tags %}
+            <a href="{{ url_for('product_list_filtered', tag=tag) }}">{{ tag }}</a>
+        {% endfor %}
+    </div>
+
     <div class="closesCart container">
         {% for p in products %}
             <div class="product" id="{{ p[0] }}">
