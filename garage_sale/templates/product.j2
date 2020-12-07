@@ -1,35 +1,47 @@
 {% extends "base/base.j2" %}
 {% import "base/macros.j2" as macro %}
 
-{% block title %}{{name}}{% endblock %}
+{% block title %}{{ name }}{% endblock %}
 
 {% block styles %}
     {{ macro.css_stylesheet(url_for('static', filename='styles/product.css')) }}
-    {{ macro.script(url_for('static', filename='scripts/product.js'), false)}}
+    {{ macro.script(url_for('static', filename='scripts/product.js'), false) }}
 {% endblock %}
 {% block content %}
-<body>
+    <body>
     {{ super() }}
     <div class="itemContainer closesCart container">
-
+        {% if user != None %}
+            <div class="row justify-content-md-center">
+                    <a href="{{ url_for('edit_product_get') }}">
+                        <button class="user-button btn btn-primary">Edit</button>
+                    </a>
+                    <a href="{{ url_for('remove_product', product_id=id) }}">
+                        <button class="user-button btn btn-danger">Remove</button>
+                    </a>
+            </div>
+        {% endif %}
         <div class="row justify-content-md-center">
             <div id="left" class="col-lg">
-                <h1 id="productName">{{name}}</h1>
-                <p id="productDescription">{{description}}</p>
-                <button onclick="addProductToCart('{{name}}', {{price}}, '{{description}}')" type="button" class="addToCartButton btn btn-primary">Add to cart</button>
+                <h1 id="productName">{{ name }}</h1>
+                <p id="productDescription">{{ description }}</p>
+                <button onclick="addProductToCart('{{ name }}', {{ price }}, '{{ description }}')" type="button"
+                        class="addToCartButton btn btn-primary">Add to cart
+                </button>
             </div>
             <div id="right" class="col-lg h-100">
-                <img class="productImage" src="{{ url_for('static', filename='images/products/' + image_file) if image_file else url_for('static', filename='images/product_image_not_available.png')}}">
+                <img class="productImage"
+                     src="{{ url_for('static', filename='images/products/' + image_file) if image_file else url_for('static', filename='images/product_image_not_available.png') }}">
             </div>
-        </div>  
+        </div>
     </div>
     <div class="sellerContainer closesCart container">
         <h1>Seller Info</h1>
         <div class="sellerProfileContainer">
             <img class="sellerImage" src="{{ url_for('static', filename='images/users/' + sPath) }}">
         </div>
-        <h5>Name: {{sName}}</h5> 
-        <h5>Email: {{sEmail}}</h5>
+        <h5>Name: {{ sName }}</h5>
+        <h5>Email: {{ sEmail }}</h5>
     </div>
-</body>
+    </body>
 {% endblock %}

@@ -62,6 +62,21 @@ def product_list():
     return render_template("products.j2", products=products, user=getUser())
 
 
+@app.route("/edit/product", methods=['GET'])
+def edit_product_get():
+    return "edit product get"
+
+
+@app.route("/edit/product", methods=['POST'])
+def edit_product_post():
+    return "edit product post"
+
+
+@app.route("/product/remove/<int:product_id>")
+def remove_product(product_id):
+    pass
+
+
 @app.route('/products/<int:product_id>')
 def product(product_id):
     conn = database()  #
