@@ -13,6 +13,7 @@ from garage_sale.security import hash_password, pep
 from garage_sale.utils import logout_helper, login_required, authenticate
 from garage_sale.mail import mailer
 
+
 def getUser():
     uid = session.get("uid", None)
     exp = session.get("expires", None)
@@ -25,6 +26,7 @@ def getUser():
         SELECT fname, lname, email FROM users WHERE uid=?
     ''', (uid,)).fetchone()
     return usr
+
 
 @app.route('/')
 def home():
@@ -39,25 +41,30 @@ def logout():
 
 @app.route('/products', methods=['GET', 'POST'])
 def product_list():
+    uid = session.get("uid", None)
+
     db = database()
     c = db.cursor()
 
     if request.method == 'POST':
         value = request.form.get("value")
         if value:
-            pList = c.execute('''
+            products = c.execute('''
             SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
             ''').fetchall()
-            return render_template("products.j2", products = pList, user=getUser())
+            return render_template("products.j2", products=products, user=getUser())
 
-    pList = c.execute("SELECT * FROM Products").fetchall()
-    
-    return render_template("products.j2", products = pList, user=getUser())
+    if uid is None:
+        products = c.execute("SELECT * FROM Products").fetchall()
+    else:
+        products = c.execute("SELECT * FROM Products WHERE user = ?", (uid,)).fetchall()
+
+    return render_template("products.j2", products=products, user=getUser())
 
 
 @app.route('/products/<int:product_id>')
 def product(product_id):
-    conn = database()#
+    conn = database()  #
     c = conn.cursor()
     result = c.execute('''
         SELECT id, name, description, price, tags, image_file, condition, user, U.fname, U.lname, U.email, U.profileExt FROM Products
@@ -76,12 +83,13 @@ def product(product_id):
         condition = row[6]
         user = row[7]
         sfName = row[8]
-        slName = row[9] 
+        slName = row[9]
         sEmail = row[10]
         sExt = row[11]
         sellerName = sfName + " " + slName
-        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags, image_file=image_file, condition=condition, userID=user, sName=sellerName, sEmail=sEmail, sPath=sEmail + sExt)
-
+        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags,
+                               image_file=image_file, condition=condition, userID=user, sName=sellerName, sEmail=sEmail,
+                               sPath=sEmail + sExt)
 
 
 @app.route('/checkout')
@@ -135,7 +143,7 @@ def login_post():
         uid = session.get("uid", None)
         if uid != None:
             return redirect(url_for('home'))
-        else: 
+        else:
             flash('invalid login credentials')
             return render_template('login.j2', form=form)
     else:
@@ -157,7 +165,8 @@ def register_post():
         form.profile_image.data.save(os.path.join(user_image_dir, str(form.email.data) + extension))
 
         mailSvr = mailer()
-        mailSvr.sendMail(form.email.data, "Welcome to Garage Sale!", "Thank you for signing up to sell items on our platform. If you did not sign up for this account please reply directly to this email stating such.")
+        mailSvr.sendMail(form.email.data, "Welcome to Garage Sale!",
+                         "Thank you for signing up to sell items on our platform. If you did not sign up for this account please reply directly to this email stating such.")
 
         if form.to_user().add_to_database(extension):
             return redirect(url_for('home'))
@@ -169,6 +178,7 @@ def register_post():
 @app.route('/contact', methods=["GET"])
 def contact():
     return render_template("feedback.j2", user=getUser())
+
 
 @app.route('/contact', methods=["POST"])
 def contactEmail():
@@ -192,6 +202,7 @@ def contactEmail():
 def terms():
     return render_template("terms.j2", user=getUser())
 
+
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
@@ -203,7 +214,7 @@ def settings():
         SELECT fname, lname, email FROM users WHERE uid=?
     ''', (uid,)).fetchone()
 
-    if form.validate_on_submit() and request.method == 'POST': 
+    if form.validate_on_submit() and request.method == 'POST':
         if form.password.data != '' and form.password.data != form.confirm.data:
             flash("passwords must match")
         elif form.password.data != '':
@@ -223,12 +234,12 @@ def settings():
             ''', (form.email.data, form.fname.data, form.lname.data, uid))
             conn.commit()
 
-        conn = database()  
+        conn = database()
         cursor = conn.cursor()
         row = cursor.execute(''' 
             SELECT profileExt FROM Users where uid=? 
         ''', (uid,)).fetchone()
-        oldExt = row[0] 
+        oldExt = row[0]
 
         if form.profile_image.data is not None:
             _, extension = os.path.splitext(form.profile_image.data.filename)
@@ -241,10 +252,10 @@ def settings():
                 where uid=?
             ''', (extension, uid))
             conn.commit()
-        else: 
+        else:
             old_profile = os.path.join(user_image_dir, str(usr[2])) + oldExt
             new_profile = os.path.join(user_image_dir, form.email.data) + oldExt
-            os.rename(r''+old_profile ,r''+new_profile)
+            os.rename(r'' + old_profile, r'' + new_profile)
 
         flash("Settings have been updated")
         form.accept_changes.data = False
@@ -258,15 +269,16 @@ def settings():
         form.email.data = usr[2]
     return render_template('settings.j2', user=usr, form=form)
 
+
 @app.route("/deleteAccount/", methods=['POST'])
 def move_forward():
-    #Moving forward code
+    # Moving forward code
     userId = session.get('uid', None)
     if userId is None:
         flash("Must be signed in to delete account")
         return redirect(url_for('home'))
 
-    db = database() 
+    db = database()
     db.cursor().execute(''' 
         DELETE FROM Users WHERE uid=?;
     ''', (userId,))
@@ -276,9 +288,11 @@ def move_forward():
     flash("Account deleted")
     return redirect(url_for('home'))
 
+
 @app.route("/recoverPassword", methods=['GET'])
 def recoverPassword_get():
     return render_template('recoverPassword.j2', form=RecoverPasswordForm())
+
 
 @app.route("/recoverPassword", methods=['POST'])
 def recoverPassword_post():
@@ -295,13 +309,14 @@ def recoverPassword_post():
 
         # email password
         mailSvr = mailer()
-        mailSvr.sendMail(form.email.data, 'Reset Password', 'Your password has been reset. Please login with the new temporary password: ' + plainText + ' and change it immediately')
+        mailSvr.sendMail(form.email.data, 'Reset Password',
+                         'Your password has been reset. Please login with the new temporary password: ' + plainText + ' and change it immediately')
         return redirect(url_for('login_get'))
     return render_template('recoverPassword.j2')
 
 
-
 stripe.api_key = 'sk_test_51HtJ0uDZJqO6LNTXtqYjIBSHw2PLfShb1gnPC2mBbZ9QyQfFEd0O46uQJhPPoDaX21OEIltVv4UlQ63I7bW4pgHN00nE7KbjaY'
+
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
@@ -318,13 +333,13 @@ def create_checkout_session():
             },
             'unit_amount': int(float(items.get("price" + str(i))) * 100.0),
         },
-        'quantity': 1,
+            'quantity': 1,
         })
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
-        line_items= lineItems,
+        line_items=lineItems,
         mode='payment',
-        success_url= 'http://127.0.0.1:5000/',
-        cancel_url= 'http://127.0.0.1:5000/',
+        success_url='http://127.0.0.1:5000/',
+        cancel_url='http://127.0.0.1:5000/',
     )
     return jsonify(id=session.id)

@@ -15,8 +15,8 @@
 
         {{ macro.css_stylesheet(url_for('static', filename='styles/base.css')) }}
 
-        {{ macro.script('https://js.stripe.com/v3/')}}
-        {{ macro.script(url_for('static', filename='scripts/main.js'), false)}}
+        {{ macro.script('https://js.stripe.com/v3/') }}
+        {{ macro.script(url_for('static', filename='scripts/main.js'), false) }}
 
         {% block bootstrap %}
             {{ macro.css_stylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css') }}
@@ -44,7 +44,13 @@
                         <a id="home" class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a id="products" class="nav-link" href="{{ url_for('product_list') }}">Products</a>
+                        <a id="products" class="nav-link" href="{{ url_for('product_list') }}">
+                            {% if user != None %}
+                                My Products
+                            {% else %}
+                                Products
+                            {% endif %}
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a id="sell" class="nav-link" href="{{ url_for('sell_get') }}">Sell</a>
@@ -61,7 +67,8 @@
                 <ul class="navbar-nav ml-auto">
 
                     <form class="form-inline my-2 my-lg-0 ml-auto" method="POST" action="/products">
-                        <input class="form-control mr-sm-2" name = "value" type="search" placeholder="Search" aria-label="Search">
+                        <input class="form-control mr-sm-2" name="value" type="search" placeholder="Search"
+                               aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
                     {% if not user %}
@@ -74,7 +81,7 @@
                     {% endif %}
                     {% if user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('settings')}}">Settings</a>
+                            <a class="nav-link" href="{{ url_for('settings') }}">Settings</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('logout') }}">Logout {{ user[0] }}</a>
@@ -100,7 +107,7 @@
 
     <div id="cart" class="invisible">
         <div id="cartHead">
-            <span id="cartTitle">Cart</span> 
+            <span id="cartTitle">Cart</span>
         </div>
         <div id="cartItems">
             <div class="cartItemContainer container">
