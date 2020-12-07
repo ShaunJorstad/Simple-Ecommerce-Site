@@ -102,6 +102,8 @@ def edit_product_post(product_id):
         else:
             new_product.set_image_name(old_product.image_file)
 
+        new_product.tags = new_product.tags.lower().replace(" ", "")
+
         new_product.update_database(product_id)
         return redirect(url_for('product_list'))
     else:
@@ -187,6 +189,8 @@ def sell_post():
 
         new_product = sell_form.to_product(session.get("uid", None))
         new_product.set_image_name(image_file_name)
+
+        new_product.tags = new_product.tags.lower().replace(" ", "")
 
         new_product.add_to_database()
         return redirect(url_for('product_list'))
