@@ -18,9 +18,11 @@ class LoginForm(FlaskForm):
             self.password.data
         )
 
+
 class RecoverPasswordForm(FlaskForm):
     email = StringField('Email', [validators.Email(), validators.DataRequired()])
     submit = SubmitField('Submit')
+
 
 class RegistrationForm(FlaskForm):
     email = StringField('Email', [validators.Email(), validators.DataRequired()])
@@ -43,6 +45,7 @@ class RegistrationForm(FlaskForm):
             self.lname.data
         )
 
+
 class SettingsForm(FlaskForm):
     email = StringField('Email', [validators.Email()])
     fname = StringField('First Name')
@@ -61,11 +64,12 @@ class SettingsForm(FlaskForm):
             self.password.data,
             self.fname.data,
             self.lname.data
-        ) 
+        )
+
 
 class CreateProductForm(FlaskForm):
     posting_title = StringField("Posting Title", [validators.Length(max=120), validators.DataRequired()])
-    price = StringField("Price", [validators.regexp(r'^\$?([\d,]+(\.\d\d)?)$'), validators.DataRequired()])
+    price = StringField("Price", [validators.regexp(r'^\$?([\d,]+(\.\d\d?)?)$'), validators.DataRequired()])
     description = TextAreaField("Description", [validators.Length(max=1000)])
     tags = TextAreaField("Tags (comma separated)")
     image_file = FileField("Image")
@@ -82,3 +86,10 @@ class CreateProductForm(FlaskForm):
             self.image_file.data,
             self.condition.data
         )
+
+    def from_product(self, product):
+        self.posting_title.data = product.name
+        self.price.data = product.price
+        self.description.data = product.description
+        self.tags.data = product.tags
+        self.condition.data = product.condition

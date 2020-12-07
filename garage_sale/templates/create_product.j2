@@ -16,7 +16,13 @@
 {% block content %}
     {% call macro.container() %}
         <div class="page-header">
-            <h1>Sell a Product</h1>
+            <h1>
+                {% if edit %}
+                    Edit a Product
+                {% else %}
+                    Sell a Product
+                {% endif %}
+            </h1>
         </div>
 
         {% call macro.form(enctype="multipart/form-data") %}
@@ -38,18 +44,30 @@
                 {% call macro.column('col-md-6') %}
                     <img class="product-image"
                          id="product-image"
-                         src="{{ url_for('static', filename='images/product_image_not_available.png') }}"
+                         src="{% if edit %}{{ url_for('static', filename="images/products/") ~ editing_image_file }}{% else %}{{ url_for('static', filename='images/product_image_not_available.png') }}{% endif %}"
                          alt="posting image">
                     <div class="form-group">
-                        <label class="control-label" for="image_file">Image</label>
+                        <label class="control-label" for="image_file">
+                            {% if edit %}
+                                Change Image
+                            {% else %}
+                                Image
+                            {% endif %}
+                        </label>
                         <input id="image_file" name="image_file" type="file"
-                               onchange="loadFile(event, 'product-image')" required>
+                               onchange="loadFile(event, 'product-image')" {% if not edit %}required{% endif %}>
                     </div>
                 {% endcall %}
             {% endcall %}
 
             {% call macro.row(h_center=true) %}
-                <button class="btn btn-primary submit-button" type="submit">Create Posting</button>
+                <button class="btn btn-primary submit-button" type="submit">
+                    {% if edit %}
+                        Save
+                    {% else %}
+                        Sell
+                    {% endif %}
+                </button>
             {% endcall %}
         {% endcall %}
     {% endcall %}

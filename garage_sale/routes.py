@@ -7,6 +7,7 @@ import stripe
 from flask import session, redirect, url_for, render_template, request, flash, jsonify
 
 from garage_sale import app, user_image_dir, product_image_dir
+from garage_sale.data_structures import get_product_from_database
 from garage_sale.database import database
 from garage_sale.forms import LoginForm, RegistrationForm, CreateProductForm, SettingsForm, RecoverPasswordForm
 from garage_sale.security import hash_password, pep
@@ -62,14 +63,52 @@ def product_list():
     return render_template("products.j2", products=products, user=getUser())
 
 
-@app.route("/edit/product", methods=['GET'])
-def edit_product_get():
-    return "edit product get"
+@app.route("/edit/product/<int:product_id>", methods=['GET'])
+def edit_product_get(product_id):
+    form = CreateProductForm()
+
+    previous_product = get_product_from_database(product_id)
+
+    form.from_product(previous_product)
+
+    return render_template(
+        "create_product.j2",
+        form=form,
+        edit=True,
+        editing_image_file=previous_product.image_file,
+        user=getUser()
+    )
 
 
-@app.route("/edit/product", methods=['POST'])
-def edit_product_post():
-    return "edit product post"
+@app.route("/edit/product/<int:product_id>", methods=['POST'])
+def edit_product_post(product_id):
+    form = CreateProductForm()
+
+    print("submitted" + str(product_id))
+    print(form.posting_title.data)
+
+    if form.validate_on_submit():
+        old_product = get_product_from_database(product_id)
+        new_product = form.to_product(session.get("uid", None))
+
+        # Replace image if needed
+        if new_product.image_file:
+            os.remove(os.path.join(product_image_dir, old_product.image_file))
+
+            _, extension = os.path.splitext(form.image_file.data.filename)
+            image_file_name = str(uuid.uuid1()) + extension
+
+            form.image_file.data.save(os.path.join(product_image_dir, image_file_name))
+            new_product.set_image_name(image_file_name)
+        else:
+            new_product.set_image_name(old_product.image_file)
+
+        new_product.update_database(product_id)
+        return redirect(url_for('product_list'))
+    else:
+        print(form.errors)
+        flash("Invalid. Please try again.")
+        return redirect(url_for('edit_product_get', product_id=product_id))
 
 
 @app.route("/product/remove/<int:product_id>")
@@ -146,8 +185,6 @@ def sell_post():
         image_file_name = str(uuid.uuid1()) + extension
 
         sell_form.image_file.data.save(os.path.join(product_image_dir, image_file_name))
-
-        print(session.get("uid", None))
 
         new_product = sell_form.to_product(session.get("uid", None))
         new_product.set_image_name(image_file_name)

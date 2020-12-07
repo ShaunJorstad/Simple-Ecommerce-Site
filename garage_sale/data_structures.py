@@ -32,6 +32,25 @@ class User:
         return True
 
 
+def get_product_from_database(product_id):
+    conn = database()
+    c = conn.cursor()
+
+    product_info = c.execute("""
+        SELECT * FROM Products WHERE id = ?
+    """, (product_id,)).fetchone()
+
+    return Product(
+        product_info[1],
+        product_info[2],
+        product_info[7],
+        product_info[3],
+        product_info[4],
+        product_info[5],
+        product_info[6]
+    )
+
+
 class Product:
     def __init__(self, name, price, user, description="", tags="", image_file="", condition=""):
         self.name = name
@@ -52,4 +71,27 @@ class Product:
             INSERT into Products (name, price, description, tags, image_file, condition, user)
             VALUES (?, ?, ?, ?, ?, ?, ?);
         ''', (self.name, self.price, self.description, self.tags, self.image_file, self.condition, self.user))
+        conn.commit()
+
+    def update_database(self, product_id):
+        conn = database()
+        c = conn.cursor()
+
+        product_info = c.execute("""
+            SELECT * FROM Products WHERE id = ?
+        """, (product_id,)).fetchone()
+
+        if product_info is None:
+            return
+
+        c.execute("""
+            UPDATE Products SET
+                name = ?,
+                price = ?,
+                description = ?,
+                tags = ?,
+                image_file = ?,
+                condition = ?
+            WHERE id = ?
+        """, (self.name, self.price, self.description, self.tags, self.image_file, self.condition, product_id))
         conn.commit()
