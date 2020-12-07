@@ -74,7 +74,23 @@ def edit_product_post():
 
 @app.route("/product/remove/<int:product_id>")
 def remove_product(product_id):
-    pass
+    db = database()
+    cursor = db.cursor()
+
+    # Remove product image
+    image_file = cursor.execute("""
+        SELECT image_file FROM Products WHERE id = ?
+    """, (product_id,)).fetchone()
+
+    os.remove(os.path.join(product_image_dir, image_file[0]))
+
+    # Remove product from database
+    cursor.execute("""
+        DELETE FROM Products WHERE id = ?
+    """, (product_id,))
+    db.commit()
+
+    return redirect(url_for("product_list"))
 
 
 @app.route('/products/<int:product_id>')
@@ -137,7 +153,7 @@ def sell_post():
         new_product.set_image_name(image_file_name)
 
         new_product.add_to_database()
-        return redirect(url_for('home'))
+        return redirect(url_for('product_list'))
     else:
         flash("Invalid. Please try again.")
         return redirect(url_for('sell_get'))
