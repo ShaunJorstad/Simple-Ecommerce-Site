@@ -62,7 +62,6 @@ def product_list():
 
     return render_template("products.j2", products=products, user=getUser())
 
-
 @app.route("/edit/product/<int:product_id>", methods=['GET'])
 def edit_product_get(product_id):
     form = CreateProductForm()
@@ -157,7 +156,7 @@ def product(product_id):
         sEmail = row[10]
         sExt = row[11]
         sellerName = sfName + " " + slName
-        return render_template("product.j2", id=id, name=name, description=description, price=price, tags=tags,
+        return render_template("product.j2", user=getUser(), id=id, name=name, description=description, price=price, tags=tags,
                                image_file=image_file, condition=condition, userID=user, sName=sellerName, sEmail=sEmail,
                                sPath=sEmail + sExt)
 

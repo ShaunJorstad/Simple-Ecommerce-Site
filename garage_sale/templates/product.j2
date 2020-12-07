@@ -25,9 +25,11 @@
             <div id="left" class="col-lg">
                 <h1 id="productName">{{ name }}</h1>
                 <p id="productDescription">{{ description }}</p>
-                <button onclick="addProductToCart('{{ name }}', {{ price }}, '{{ description }}')" type="button"
-                        class="addToCartButton btn btn-primary">Add to cart
-                </button>
+                {% if user == None %}
+                    <button onclick="addProductToCart('{{ name }}', {{ price }}, '{{ description }}')" type="button"
+                            class="addToCartButton btn btn-primary">Add to cart
+                    </button>
+                {% endif %}
             </div>
             <div id="right" class="col-lg h-100">
                 <img class="productImage"
