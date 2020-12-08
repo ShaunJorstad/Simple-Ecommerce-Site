@@ -17,7 +17,7 @@
     <body>
     {{ super() }}
 
-    <div class="closesCart container">
+    <div class=" closesCart container">
         <div id="prod-container">
             {% for p in products %}
                 <div class="product" id="{{ p[0] }}">
@@ -41,7 +41,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div>
+        <div id="buttonDiv">
             <button id="load-btn" type="button" class="btn btn-dark">Load More</button>
         </div>
     </div>
