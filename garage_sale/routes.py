@@ -87,9 +87,15 @@ def product_list():
     if request.method == 'POST':
         value = request.form.get("value")
         if value:
-            products = c.execute('''
-            SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
-            ''').fetchall()
+            products = None
+            if uid is not None:
+                products = c.execute('''
+                SELECT * FROM Products WHERE name LIKE '%''' + value + '''%' AND user=?;
+                ''', (uid,)).fetchall()
+            else:
+                products = c.execute('''
+                SELECT * FROM Products WHERE name LIKE '%''' + value + '''%';
+                ''').fetchall() 
             return render_template("products.j2", products=products, user=getUser(), tags=list(tag_set))
 
     if uid is None:
