@@ -62,3 +62,26 @@
     margin-right: auto;
     margin-left: auto;
 }
+.filter-list {
+    border-radius: 20px;
+    width: 130px;
+    position: fixed;
+    z-index: 1;
+    top: 80px;
+    left: 10px;
+    background: #F9F9F9;
+    overflow-x: hidden;
+    padding: 8px 0;
+}
+
+.filter-list h3 {
+    text-align: center;
+}
+
+.filter-list a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #2196F3;
+    display: block;
+}
