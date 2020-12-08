@@ -150,6 +150,7 @@ function removeItemFromCart(itemID) {
       cart.total -= cart.items[i].cost;
       cart.items.splice(i, 1);
       setCookie(JSON.stringify(cart.items));
+      break;
     }
   }
 
