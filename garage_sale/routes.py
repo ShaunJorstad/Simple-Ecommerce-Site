@@ -44,17 +44,29 @@ def logout():
 def getNextProds(prod_id):
     db = database()
     c = db.cursor()
+    uid = session.get("uid", None)
 
-    allProducts = c.execute(f"SELECT * FROM Products WHERE id > {prod_id} ORDER by id ASC").fetchall()
-    #just grab the first 20 products
-    products = []
-    try:
-        for i in range(20):
-            products.append(allProducts[i])
-    except:
-        products = allProducts
-    
-    return jsonify(products)
+    if uid is None:
+        allProducts = c.execute(f"SELECT * FROM Products WHERE id > {prod_id} ORDER by id ASC").fetchall()
+        #just grab the first 20 products
+        products = []
+        try:
+            for i in range(20):
+                products.append(allProducts[i])
+        except:
+            products = allProducts
+        
+        return jsonify(products)
+    else:
+        allProducts = c.execute(f"SELECT * FROM Products WHERE id > {prod_id} AND user = {uid} ORDER by id ASC").fetchall()
+        products = []
+        try:
+            for i in range(20):
+                products.append(allProducts[i])
+        except:
+            products = allProducts
+        
+        return jsonify(products)
 
 @app.route('/products', methods=['GET', 'POST'])
 def product_list():
