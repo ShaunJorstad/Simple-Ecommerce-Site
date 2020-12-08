@@ -90,3 +90,8 @@
     color: #2196F3;
     display: block;
 }
+
+body{
+    margin-bottom: 60px !important;
+    margin-left: 80px !important;
+}
