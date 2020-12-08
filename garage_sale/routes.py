@@ -146,6 +146,9 @@ def edit_product_get(product_id):
 
     previous_product = get_product_from_database(product_id)
 
+    if session.get('uid', None) is None or session.get('uid') != previous_product.user:
+        redirect(url_for('home'))
+
     form.from_product(previous_product)
 
     return render_template(
