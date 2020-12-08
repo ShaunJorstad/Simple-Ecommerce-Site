@@ -1,6 +1,7 @@
 import os
 import string, random
 import uuid
+import re
 from datetime import datetime, timedelta
 
 import stripe
@@ -307,9 +308,15 @@ def contact():
 
 @app.route('/contact', methods=["POST"])
 def contactEmail():
-    email = request.form.get("email")
+    email = request.form.get("email").lower()
     subject = request.form.get("subject")
     complaint = request.form.get("complaint")
+    regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+
+    if(not re.search(regex, email)):
+        flash("Invalid Email")
+        return redirect(url_for('contact'))
+    
 
     sub = f"Customer feedback about {subject}"
 
