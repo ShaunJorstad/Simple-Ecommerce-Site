@@ -121,9 +121,15 @@ def product_list_filtered(tag):
     for tag_list in tags:
         tag_set = tag_set.union(set(map(str.strip, tag_list[0].split(","))))
 
-    products = cursor.execute('''
-        SELECT * FROM Products WHERE tags LIKE '%''' + tag + '''%';
-        ''').fetchall()
+    uid = session.get("uid", None)
+    if uid is not None:
+        products = cursor.execute('''
+        SELECT * FROM Products WHERE tags LIKE '%''' + tag + '''%' AND user=?;
+        ''', (uid,)).fetchall()
+    else:
+        products = cursor.execute('''
+            SELECT * FROM Products WHERE tags LIKE '%''' + tag + '''%';
+            ''').fetchall()
 
     return render_template("products.j2", products=products, user=getUser(), tags=list(tag_set))
 
