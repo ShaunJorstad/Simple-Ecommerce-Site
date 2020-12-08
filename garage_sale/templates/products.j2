@@ -8,7 +8,7 @@
     {{ macro.script(url_for('static', filename='scripts/products.js')) }}
 {% endblock %}
 {% block content %}
-    <div class="filter-list">
+    <div class="closesCart filter-list">
         <h3>Tags</h3>
         {% for tag in tags %}
             <a href="{{ url_for('product_list_filtered', tag=tag) }}">{{ tag }}</a>
