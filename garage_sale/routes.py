@@ -441,6 +441,10 @@ def move_forward():
     db.cursor().execute(''' 
         DELETE FROM Users WHERE uid=?;
     ''', (userId,))
+    db.cursor().execute(''' 
+    
+        DELETE FROM Products WHERE user=?;
+    ''',(userId,))
     db.commit()
     session["uid"] = None
     session["expires"] = None
