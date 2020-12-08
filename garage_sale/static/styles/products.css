@@ -12,6 +12,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    margin-left: 50px;
+}
+
+#buttonDiv {
+    padding-top: 50px;
+    padding-bottom: 150px;
 }
 
 #products {
@@ -66,10 +72,12 @@
 
     margin-right: auto;
     margin-left: auto;
+
 }
 .filter-list {
     border-radius: 20px;
-    width: 130px;
+    width: 160px;
+    height: 70%;
     position: fixed;
     z-index: 1;
     top: 80px;
@@ -93,5 +101,5 @@
 
 body{
     margin-bottom: 60px !important;
-    margin-left: 80px !important;
+    /* margin-left: 80px !important; */
 }
