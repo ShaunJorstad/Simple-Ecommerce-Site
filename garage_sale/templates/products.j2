@@ -5,32 +5,38 @@
 
 {% block styles %}
     {{ macro.css_stylesheet(url_for('static', filename='styles/products.css')) }}
+    {{ macro.script(url_for('static', filename='scripts/products.js')) }}
 {% endblock %}
 {% block content %}
     <body>
     {{ super() }}
     <div class="closesCart container">
-        {% for p in products %}
-            <div class="product" id="{{ p[0] }}">
-                <a href="{{ url_for('product', product_id=p[0]) }}">
-                    <div class="product-image">
-                        <img class="prodImg"
-                             src="{{ url_for('static', filename=('images/products/' + p[5]) if p[5] else "images/product_image_not_available.png") }}"
-                             alt="product image">
-                    </div>
-                    <h3 class="prodTitle">{{ p[1] }}</h3>
-                    <p class="price">${{ p[2] }}</p>
-                </a>
-                {% if user %}
-                {% else %}
-                    <div class="center">
-                        <button onclick="addProductToCart('{{ p[1] }}', {{ p[2] }}, '{{ p[3] }}')"
-                                class="btn btn-primary addToCartBtn">Add To Cart
-                        </button>
-                    </div>
-                {% endif %}
-            </div>
-        {% endfor %}
+        <div id="prod-container">
+            {% for p in products %}
+                <div class="product" id="{{ p[0] }}">
+                    <a href="{{ url_for('product', product_id=p[0]) }}">
+                        <div class="product-image">
+                            <img class="prodImg"
+                                src="{{ url_for('static', filename=('images/products/' + p[5]) if p[5] else "images/product_image_not_available.png") }}"
+                                alt="product image">
+                        </div>
+                        <h3 class="prodTitle">{{ p[1] }}</h3>
+                        <p class="price">${{ p[2] }}</p>
+                    </a>
+                    {% if user %}
+                    {% else %}
+                        <div class="center">
+                            <button onclick="addProductToCart('{{ p[1] }}', {{ p[2] }}, '{{ p[3] }}')"
+                                    class="btn btn-primary addToCartBtn">Add To Cart
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            <button id="load-btn" type="button" class="btn btn-dark">Load More</button>
+        </div>
     </div>
     </body>
 {% endblock %}

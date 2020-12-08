@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timedelta
 
 import stripe
-from flask import session, redirect, url_for, render_template, request, flash, jsonify
+from flask import json, session, redirect, url_for, render_template, request, flash, jsonify
 
 from garage_sale import app, user_image_dir, product_image_dir
 from garage_sale.data_structures import get_product_from_database
@@ -39,6 +39,21 @@ def logout():
     logout_helper()
     return redirect(url_for("home"))
 
+@app.route("/fetchproducts/<int:prod_id>")
+def getNextProds(prod_id):
+    db = database()
+    c = db.cursor()
+
+    allProducts = c.execute(f"SELECT * FROM Products WHERE id > {prod_id} ORDER by id ASC").fetchall()
+    #just grab the first 20 products
+    products = []
+    try:
+        for i in range(20):
+            products.append(allProducts[i])
+    except:
+        products = allProducts
+    
+    return jsonify(products)
 
 @app.route('/products', methods=['GET', 'POST'])
 def product_list():
@@ -56,7 +71,14 @@ def product_list():
             return render_template("products.j2", products=products, user=getUser())
 
     if uid is None:
-        products = c.execute("SELECT * FROM Products").fetchall()
+        allProducts = c.execute("SELECT * FROM Products ORDER by id ASC").fetchall()
+        #just grab the first 20 products
+        products = []
+        try:
+            for i in range(20):
+                products.append(allProducts[i])
+        except:
+            products = allProducts
     else:
         products = c.execute("SELECT * FROM Products WHERE user = ?", (uid,)).fetchall()
 

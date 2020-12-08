@@ -54,3 +54,11 @@
     opacity: 0;
     transition: all .35s ease-in-out;
 }
+
+#load-btn{
+    clear: both;
+    display: block;
+
+    margin-right: auto;
+    margin-left: auto;
+}
