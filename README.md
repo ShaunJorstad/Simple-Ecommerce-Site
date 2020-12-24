@@ -1,17 +1,18 @@
 # WebProject
 
-Simple garage sale website to sell and purchase items from other people
+Simple ecommerce website. Users can register for seller accounts where they can post items for sale. Anyone visiting the site can add items ot their cart and complete the transaction. 
 
-## What has yet to be implemented 
-- Visual redesign of some clunky elements
-- Filters on the products grid 
-- Product Search 
-- Dashboard of seller's products. (When logged in the products page will read 'my products' and will be the sellers current products)
+## Tech Stack
+- Flask backend
+- HTML/CSS/SASS
+- Plain Javascript
+- Stripe payment processing
+- SQLite3
+
+
+## Dependencies
+pip install flask flask-wtf cryptography flask-reuploaded passlib flask-bootstrap email_validator stripe
 
 ## Run with
 FLASK_APP = garage_sale
 
-note: must install dependencies for the server to run
-
-## Dependencies
-pip install flask flask-wtf cryptography flask-reuploaded passlib flask-bootstrap email_validator stripe
